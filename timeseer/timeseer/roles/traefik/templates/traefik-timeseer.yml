@@ -1,0 +1,58 @@
+---
+
+http:
+  services:
+    timeseer:
+      loadBalancer:
+        servers:
+        - url: "http://timeseer:8080"
+{% if traefik_timeseer_reverse_proxy_enable %}
+    reverseProxy:
+      loadBalancer:
+        servers:
+        - url: "http://timeseer-reverse-proxy:8000"
+{% endif %}
+{% if traefik_expose_flight %}
+    flight:
+      loadBalancer:
+        servers:
+        - url: "h2c://timeseer:8081"
+{% endif %}
+
+{% if traefik_basic_auth_enable %}
+  middlewares:
+    auth:
+      basicAuth:
+        users:
+{% for user in traefik_basic_auth_users %}
+          - {{ user }}
+{% endfor %}
+
+        headerField: "X-Forwarded-User"
+{% endif %}
+
+  routers:
+    timeseer:
+      entryPoints:
+      - "https"
+{% if traefik_basic_auth_enable %}
+      middlewares:
+      - "auth@file"
+{% endif %}
+{% if not traefik_timeseer_reverse_proxy_enable %}
+      service: timeseer
+{% else %}
+      service: reverseProxy
+{% endif %}
+      rule: "Host(`{{ traefik_host }}`)"
+      tls:
+        certResolver: timeseer-le
+{% if traefik_expose_flight %}
+    flight:
+      entryPoints:
+      - "flight"
+      service: flight
+      rule: "Host(`{{ traefik_host }}`)"
+      tls:
+        certResolver: timeseer-le
+{% endif %}

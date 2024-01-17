@@ -1,0 +1,64 @@
+- name: Prepare a storage directory
+  ansible.builtin.file:
+    path: "{{ timeseer_dir }}/db"
+    owner: 1001
+    state: directory
+  when: timeseer_docker_volume | default('') | trim == ''
+
+- name: Prepare a read-only data directory
+  ansible.builtin.file:
+    path: "{{ timeseer_dir }}/data"
+    owner: 1001
+    state: directory
+
+- name: Set storage path to Docker volume
+  set_fact:
+    timeseer_storage_mount: "{{ timeseer_docker_volume }}"
+  when: timeseer_docker_volume | default('') | trim != ''
+
+- name: Set storage path to timeseer default storage_path
+  set_fact:
+    timeseer_storage_mount: "{{ timeseer_db_dir }}/db"
+  when: timeseer_docker_volume | default('') | trim == ''
+
+- name: Create a Docker network
+  community.docker.docker_network:
+    name: "{{ timeseer_network }}"
+
+- name: Download demo data
+  community.docker.docker_container:
+    name: timeseer-demo-data
+    auto_remove: true
+    detach: false
+    image: "{{ timeseer_image }}"
+    pull: true
+    command: "python -m timeseer.cli demo-data"
+    state: started
+    volumes:
+      - "{{ timeseer_dir }}/data:/usr/src/app/data"
+    log_driver: journald
+    log_options:
+      tag: "{{ timeseer_journal_tag }}"
+    tty: true
+  when: timeseer_download_demo_data
+
+- name: Run Timeseer in a Docker container
+  community.docker.docker_container:
+    name: timeseer
+    image: "{{ timeseer_image }}"
+    state: started
+    restart_policy: unless-stopped
+    networks:
+      - name: "{{ timeseer_network }}"
+    volumes: "{{ volume_list }}"
+    log_driver: journald
+    log_options:
+      tag: "{{ timeseer_journal_tag }}"
+    tty: true
+  vars:
+    base_volumes:
+      - "{{ timeseer_dir }}/data:/usr/src/app/data"
+      - "{{ timeseer_storage_mount }}:/usr/src/app/db"
+    custom_toml_volume:
+      - "{{ timeseer_config_dir }}:/usr/src/app/config/:ro"
+    volume_list: "{{ base_volumes + (custom_toml_volume if timeseer_config_dir | default('') | trim != '' else []) }}"

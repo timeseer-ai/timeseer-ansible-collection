@@ -1,0 +1,57 @@
+- name: Fail when no Let's Encrypt mail has been configured
+  ansible.builtin.fail:
+    msg: 'variable "traefik_letsencrypt_mail" not set'
+  when: traefik_letsencrypt_mail is not defined or traefik_letsencrypt_mail | trim | count == 0
+
+- name: Prepare configuration directory
+  ansible.builtin.file:
+    path: "{{ traefik_dir }}"
+    state: directory
+
+- name: Prepare directory for Let's Encrypt
+  ansible.builtin.file:
+    path: "{{ traefik_dir }}/acme"
+    state: directory
+
+- name: Template configuration files
+  ansible.builtin.template:
+    src: "{{ item }}"
+    dest: "{{ traefik_dir }}/{{ item }}"
+  with_items:
+    - "traefik.yml"
+    - "traefik-timeseer.yml"
+  register: traefik_config
+
+- name: Trigger container restart on config file change
+  ansible.builtin.set_fact:
+    traefik_recreate_container: true
+  with_items: "{{ traefik_config.results }}"
+  when: item is changed
+  loop_control:
+    label: "{{ item.dest }}"
+
+- name: Run in a Docker container
+  community.docker.docker_container:
+    name: traefik
+    image: "{{ traefik_image }}"
+    pull: true
+    state: "started"
+    recreate: "{{ traefik_recreate_container }}"
+    restart_policy: unless-stopped
+    networks:
+      - name: "{{ traefik_network }}"
+    comparisons:
+      networks: strict
+    published_ports:
+      - "80:80"
+      - "443:443"
+      - "8443:8443"
+    volumes:
+      - "{{ traefik_dir }}/traefik.yml:/etc/traefik/traefik.yml"
+      - "{{ traefik_dir }}/traefik-timeseer.yml:/etc/traefik/traefik-timeseer.yml"
+      - "{{ traefik_dir }}/acme:/etc/traefik/acme"
+    log_driver: journald
+    log_options:
+      tag: "{{ traefik_journal_tag }}"
+    tty: true
+

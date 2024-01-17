@@ -1,0 +1,8 @@
+timeseer_dir: /opt/timeseer
+timeseer_db_dir: /opt/timeseer
+timeseer_docker_volume: ""
+timeseer_image: docker.timeseer.ai/timeseer
+timeseer_config_dir: ""
+timeseer_network: timeseer
+timeseer_journal_tag: "TIMESEER"
+timeseer_download_demo_data: false

@@ -1,0 +1,30 @@
+- name: Prepare configuration directory
+  ansible.builtin.file:
+    path: "{{ timeseer_reverse_proxy_dir }}"
+    state: directory
+
+- name: Create a file for environment variables
+  ansible.builtin.file:
+    path: "{{ timeseer_reverse_proxy_dir }}/env"
+    state: touch
+
+- name: Run Timeseer Reverse Proxy in a Docker container
+  community.docker.docker_container:
+    name: timeseer-reverse-proxy
+    image: "{{ timeseer_reverse_proxy_image }}"
+    command: "/usr/bin/timeseer-reverse-proxy --config-file /usr/src/app/Timeseer-reverse-proxy.toml"
+    pull: true
+    state: started
+    restart_policy: unless-stopped
+    networks:
+      - name: "{{ timeseer_network }}"
+    volumes: "{{ reverse_proxy_volume_list }}"
+    env_file: "{{ timeseer_reverse_proxy_dir }}/env"
+    log_driver: journald
+    log_options:
+      tag: "{{ timeseer_reverse_proxy_journal_tag }}"
+    tty: true
+  vars:
+    custom_toml_volume:
+      - "{{ timeseer_reverse_proxy_config_dir | default(timeseer_reverse_proxy_dir) }}:/usr/src/app/proxy-config/:ro"
+    reverse_proxy_volume_list: "{{ custom_toml_volume if timeseer_reverse_proxy_config_dir | default('') | trim != '' else [] }}"
