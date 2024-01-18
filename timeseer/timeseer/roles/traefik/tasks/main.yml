@@ -6,29 +6,25 @@
 - name: Prepare configuration directory
   ansible.builtin.file:
     path: "{{ traefik_dir }}"
+    mode: "0644"
     state: directory
 
 - name: Prepare directory for Let's Encrypt
   ansible.builtin.file:
     path: "{{ traefik_dir }}/acme"
+    mode: "0644"
     state: directory
 
 - name: Template configuration files
   ansible.builtin.template:
     src: "{{ item }}"
     dest: "{{ traefik_dir }}/{{ item }}"
+    mode: "0644"
   with_items:
     - "traefik.yml"
     - "traefik-timeseer.yml"
   register: traefik_config
-
-- name: Trigger container restart on config file change
-  ansible.builtin.set_fact:
-    traefik_recreate_container: true
-  with_items: "{{ traefik_config.results }}"
-  when: item is changed
-  loop_control:
-    label: "{{ item.dest }}"
+  notify: Restart Traefik Container
 
 - name: Run in a Docker container
   community.docker.docker_container:
@@ -54,4 +50,3 @@
     log_options:
       tag: "{{ traefik_journal_tag }}"
     tty: true
-

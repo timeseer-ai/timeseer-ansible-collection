@@ -1,11 +1,13 @@
 - name: Prepare configuration directory
   ansible.builtin.file:
     path: "{{ timeseer_reverse_proxy_dir }}"
+    mode: "0644"
     state: directory
 
 - name: Create a file for environment variables
   ansible.builtin.file:
     path: "{{ timeseer_reverse_proxy_dir }}/env"
+    mode: "0644"
     state: touch
 
 - name: Run Timeseer Reverse Proxy in a Docker container

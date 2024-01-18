@@ -1,0 +1,8 @@
+releases:
+  1.0.0:
+    release_date: "2024-01-18"
+    changes:
+      release_summary: |
+        TimeSeer 1.0.0: Redefining Data Analysis
+
+        This is the initial stable release of the timeseer Ansible Collection...
