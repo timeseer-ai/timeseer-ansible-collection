@@ -1,7 +1,7 @@
 - name: Prepare configuration directory
   ansible.builtin.file:
     path: "{{ timeseer_reverse_proxy_dir }}"
-    mode: "0644"
+    mode: "0755"
     state: directory
 
 - name: Create a file for environment variables

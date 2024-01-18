@@ -2,7 +2,7 @@
   ansible.builtin.file:
     path: "{{ timeseer_dir }}/db"
     owner: 1001
-    mode: "0644"
+    mode: "0755"
     state: directory
   when: timeseer_docker_volume | default('') | trim == ''
 
@@ -10,7 +10,7 @@
   ansible.builtin.file:
     path: "{{ timeseer_dir }}/data"
     owner: 1001
-    mode: "0644"
+    mode: "0755"
     state: directory
 
 - name: Set storage path to Docker volume

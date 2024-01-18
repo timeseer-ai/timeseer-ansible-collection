@@ -6,13 +6,13 @@
 - name: Prepare configuration directory
   ansible.builtin.file:
     path: "{{ traefik_dir }}"
-    mode: "0644"
+    mode: "0755"
     state: directory
 
 - name: Prepare directory for Let's Encrypt
   ansible.builtin.file:
     path: "{{ traefik_dir }}/acme"
-    mode: "0644"
+    mode: "0755"
     state: directory
 
 - name: Template configuration files
