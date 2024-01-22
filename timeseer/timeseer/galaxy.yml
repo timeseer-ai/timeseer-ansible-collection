@@ -2,7 +2,7 @@
 # The namespace of the collection. This can be a company/brand/organization or product namespace under which all
 # content lives. May only contain alphanumeric lowercase characters and underscores. Namespaces cannot start with
 # underscores or numbers and cannot contain consecutive underscores
-namespace: timeseer
+namespace: diogolobo122
 
 # The name of the collection. Has the same character restrictions as 'namespace'
 name: timeseer
@@ -28,13 +28,9 @@ description: timeseer-ansible-collection" is designed to facilitate the seamless
 license:
   - MIT
 
-# The path to the license file for the collection. This path is relative to the root of the collection. This key is
-# mutually exclusive with 'license'
-license_file: "MIT license"
-
 # A list of tags you want to associate with the collection for indexing/searching. A tag name has the same character
 # requirements as 'namespace' and 'name'
-tags: [tools, timeseer, data, docker, "data analysis"]
+tags: [tools, timeseer, data, docker]
 
 # Collections that this collection requires to be installed for it to be usable. The key of the dict is the
 # collection label 'namespace.name'. The value is a version range
