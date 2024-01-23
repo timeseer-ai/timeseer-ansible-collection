@@ -2,11 +2,9 @@
 
 # Ansible Role: traefik
 
+[![Ansible Galaxy](https://img.shields.io/badge/ansible--galaxy-timeseer-traefik-yellow.svg)]
+
 This Ansible role is designed for deploying and configuring Traefik, a modern HTTP reverse proxy and load balancer, with a focus on integrating Let's Encrypt for SSL/TLS certificates. It includes tasks for checking prerequisites, preparing directories, templating configuration files, and running Traefik in a Docker container.
-
-## Build Status Ansible Galaxy
-
-[![Ansible Galaxy](https://img.shields.io/badge/ansible--galaxy-timeseer-yellow.svg)](https://galaxy.ansible.com/ui/namespaces/diogolobo122/)
 
 ## Requirements
 
