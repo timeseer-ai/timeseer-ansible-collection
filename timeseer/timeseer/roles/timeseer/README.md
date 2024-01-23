@@ -6,7 +6,7 @@ This Ansible role is designed for setting up Timeseer, a time-series data analys
 
 ## Build Status Ansible Galaxy
 
-[![Ansible Galaxy](https://img.shields.io/badge/ansible--galaxy-timeseer-yellow.svg)](https://galaxy.ansible.com/user/DiogoLobo122)
+[![Ansible Galaxy](https://img.shields.io/badge/ansible--galaxy-timeseer-yellow.svg)](https://galaxy.ansible.com/ui/namespaces/diogolobo122/)
 
 ## Requirements
 

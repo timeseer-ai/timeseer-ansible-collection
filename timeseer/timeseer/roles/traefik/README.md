@@ -6,7 +6,7 @@ This Ansible role is designed for deploying and configuring Traefik, a modern HT
 
 ## Build Status Ansible Galaxy
 
-[![Ansible Galaxy](https://img.shields.io/badge/ansible--galaxy-timeseer-yellow.svg)](https://galaxy.ansible.com/user/DiogoLobo122)
+[![Ansible Galaxy](https://img.shields.io/badge/ansible--galaxy-timeseer-yellow.svg)](https://galaxy.ansible.com/ui/namespaces/diogolobo122/)
 
 ## Requirements
 
