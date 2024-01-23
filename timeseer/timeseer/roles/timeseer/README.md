@@ -2,7 +2,7 @@
 
 # Ansible Role: timeseer
 
-[![Ansible Galaxy](https://img.shields.io/badge/ansible--galaxy-timeseer-yellow.svg)]
+ [![Ansible Galaxy](https://img.shields.io/badge/ansible--galaxy-timeseer-yellow.svg)]
 
 This Ansible role is designed for setting up Timeseer, a time-series data analysis platform, particularly in a Dockerized environment. It handles storage directory preparations, Docker volume configurations, and manages the deployment of Timeseer in a Docker container.
 
