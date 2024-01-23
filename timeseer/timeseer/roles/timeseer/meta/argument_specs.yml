@@ -1,57 +1,57 @@
 argument_specs:
   timeseer_setup:
-    short_description: Configure and prepare TimeSeer environment
+    short_description: Configure and prepare timeseer environment
     description:
-      - Prepares directories and sets up Docker-related configurations for TimeSeer.
+      - Prepares directories and sets up Docker-related configurations for timeseer.
       - Ensures necessary directories are in place and configures storage paths based on given conditions.
 
     options:
       timeseer_dir:
         description:
-          - The base directory for TimeSeer configurations and data.
+          - The base directory for timeseer configurations and data.
         type: str
         default: "/opt/timeseer"
 
       timeseer_db_dir:
         description:
-          - Directory for TimeSeer database storage.
+          - Directory for timeseer database storage.
           - Used when Docker volume is not specified.
         type: str
         default: "/opt/timeseer"
 
       timeseer_docker_volume:
         description:
-          - Optional Docker volume for TimeSeer data storage.
+          - Optional Docker volume for timeseer data storage.
           - If defined, it is used as the primary storage path.
         type: str
         default: ""
 
       timeseer_image:
         description:
-          - The Docker image to use for TimeSeer.
+          - The Docker image to use for timeseer.
         type: str
         default: "docker.timeseer.ai/timeseer"
 
       timeseer_config_dir:
         description:
-          - Directory for custom TimeSeer configuration files.
+          - Directory for custom timeseer configuration files.
         type: str
         default: ""
 
       timeseer_network:
         description:
-          - Name of the Docker network to be used by TimeSeer.
+          - Name of the Docker network to be used by timeseer.
         type: str
         default: "timeseer"
 
       timeseer_journal_tag:
         description:
-          - Tag to use for logging purposes in the TimeSeer container.
+          - Tag to use for logging purposes in the timeseer container.
         type: str
         default: "TIMESEER"
 
       timeseer_download_demo_data:
         description:
-          - Whether to download demo data for TimeSeer.
+          - Whether to download demo data for timeseer.
         type: bool
         default: false

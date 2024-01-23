@@ -64,6 +64,6 @@ argument_specs:
 
       traefik_timeseer_reverse_proxy_enable:
         description:
-          - Whether to enable Timeseer reverse proxy configuration in Traefik.
+          - Whether to enable timeseer reverse proxy configuration in Traefik.
         type: bool
         default: false
