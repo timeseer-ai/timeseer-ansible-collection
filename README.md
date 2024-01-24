@@ -19,16 +19,16 @@ For more detailed information, visit the [Timeseer.AI website](https://www.times
   tasks:
     - name: Run Timeseer container
       ansible.builtin.import_role:
-        name: docker.timeseer
+        name: timeseer.docker.timeseer
 
     - name: Run Timeseer reverse proxy container
       ansible.builtin.import_role:
-        name: docker.timeseer_reverse_proxy
+        name: timeseer.docker.timeseer_reverse_proxy
       when: timeseer_reverse_proxy_enable is defined and timeseer_reverse_proxy_enable
 
     - name: Run Traefik reverse proxy
       ansible.builtin.import_role:
-        name: docker.traefik
+        name: timeseer.docker.traefik
       vars:
         traefik_letsencrypt_mail: "it-support@timeseer.ai"
         traefik_basic_auth_users: "{{ tsai_traefik_users + customer_traefik_users }}"
