@@ -37,9 +37,9 @@ For more detailed information, visit the [Timeseer.AI website](https://www.times
 
 ## Installation
 
-### Installing Timeseer.docker Collection with Ansible
+### Installing timeseer.docker Collection with Ansible
 
-To install the Timeseer.Timeseer Ansible collection, use the `ansible-galaxy` tool included with Ansible.
+To install the timeseer.docker Ansible collection, use the `ansible-galaxy` tool included with Ansible.
 
 #### Default Installation from Ansible Galaxy
 
