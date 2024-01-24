@@ -3,7 +3,7 @@ releases:
     release_date: "2024-01-18"
     changes:
       release_summary: |
-        TimeSeer 1.0.0: Redefining Data Analysis
+        timeseer 1.0.0: Redefining Data Analysis
 
         This is the initial stable release of the timeseer Ansible Collection.
         It contains roles for installing and configuring timeseer on a docker container
