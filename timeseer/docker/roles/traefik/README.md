@@ -35,7 +35,7 @@ Here's an example of how to include this role in a playbook:
 ```yaml
 - hosts: timeseer-server
   roles:
-    - traefik
+    - timeseer.docker.traefik
 ```
 
 ## License
@@ -44,6 +44,6 @@ See the `LICENSE.md` file in this repository.
 
 ## Author Information
 
-This role was created in 2024 by [Your Organization/Your Name].
+This role was created in 2024 by timeseer
 
 ---
