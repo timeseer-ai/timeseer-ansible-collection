@@ -18,7 +18,7 @@ To use these roles, follow the instructions in each role's directory. Ensure you
 Contributions to improve or extend the roles are welcome. Please follow the contribution guidelines outlined in the repository.
 
 ## License
-This collection is licensed under [LICENSE]. See the LICENSE file for more details.
+This collection is licensed under [MIT]. See the LICENSE file for more details.
 
 ## More Information
 For detailed information and specific configuration instructions, please visit [Timeseer.AI Ansible Collection](https://github.com/timeseer-ai/timeseer-ansible-collection/tree/master/timeseer/docker/roles).
