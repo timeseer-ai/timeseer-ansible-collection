@@ -1,6 +1,5 @@
 ---
-
- # Ansible Role: timeseer traefik
+# Ansible Role: timeseer_traefik
 
 [![Ansible Galaxy](https://img.shields.io/badge/ansible--galaxy-timeseer_traefik-yellow.svg)](https://galaxy.ansible.com/user/timeseer_reverse_proxy)
 
