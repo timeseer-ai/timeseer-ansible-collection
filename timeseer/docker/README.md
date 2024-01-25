@@ -1,8 +1,8 @@
 
-# Timeseer.AI Docker Roles
+# timeseer Docker Roles
 
 ## Introduction
-This repository contains the Ansible roles for configuring and managing the Timeseer.AI environment within Docker. Each role is specifically tailored to streamline various aspects of the Timeseer.AI setup and deployment.
+This repository contains the Ansible roles for configuring and managing the timeseer environment within Docker. Each role is specifically tailored to streamline various aspects of the timeseer setup and deployment.
 
 ## Roles Overview
 - **[timeseer]**: Sets up Timeseer in Docker, handling storage preparation, Docker volumes, and deployment.
