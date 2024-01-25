@@ -35,7 +35,7 @@ Include this role in your playbooks as follows:
 ```yaml
 - hosts: 
   roles:
-     - timeseer
+     - timeseer.docker.timeseer
 ```
 
 ## License
