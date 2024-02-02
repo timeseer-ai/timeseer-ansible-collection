@@ -57,6 +57,7 @@
     log_options:
       tag: "{{ timeseer_journal_tag }}"
     tty: true
+    ports: "{{ timeseer_ports | default(omit) }}"
   vars:
     base_volumes:
       - "{{ timeseer_dir }}/data:/usr/src/app/data"
