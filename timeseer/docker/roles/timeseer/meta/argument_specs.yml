@@ -55,3 +55,9 @@ argument_specs:
           - Whether to download demo data for timeseer.
         type: bool
         default: false
+
+      timeseer_ports:
+        description:
+          - "Custom port mapping for the timeseer container. Format should match Docker's port mapping format, e.g., '8080:8080'."
+        type: str
+        default: ""

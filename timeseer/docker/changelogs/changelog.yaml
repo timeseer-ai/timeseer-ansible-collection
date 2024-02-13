@@ -10,3 +10,11 @@ releases:
 
       Key Features:
         - Simplified installation and configuration of timeseer in Docker, making it accessible for a wide range of users.
+  1.0.1:
+    release_date: "2024-02-13"
+    changes:
+      release_summary: |
+        timeseer 1.0.1: Enhancing Configuration Flexibility
+
+      Key Features:
+        - Added the `timeseer_ports` variable, enabling users to specify custom ports for the timeseer container.

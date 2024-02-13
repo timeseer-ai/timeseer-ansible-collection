@@ -23,6 +23,7 @@ Variables used in this role are listed below, along with default values (see `de
 - `timeseer_image`: Docker image for Timeseer.
 - `timeseer_download_demo_data` (default: false): Whether to download demo data for Timeseer.
 - `timeseer_config_dir` (default: ''): Optional directory for custom Timeseer configurations.
+- `timeseer_ports:` (default: ''): Custom port mapping for the Timeseer container. This should be specified in the Docker port mapping format (e.g., '8080:8080') 
 
 ## Dependencies
 
