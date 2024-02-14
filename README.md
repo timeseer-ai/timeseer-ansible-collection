@@ -9,8 +9,8 @@ For more detailed information, visit the [Timeseer.AI website](https://www.times
 ## Requirements
 
 - Ansible 2.9 or higher.
-- Docker installed on the target machine.
-- `community.docker` Ansible collection.
+- podman installed on the target machine.
+- `community.podman` Ansible collection.
 
 ## Example Playbook
 
@@ -19,16 +19,16 @@ For more detailed information, visit the [Timeseer.AI website](https://www.times
   tasks:
     - name: Run Timeseer container
       ansible.builtin.import_role:
-        name: timeseer.docker.timeseer
+        name: timeseer.podman.timeseer
 
     - name: Run Timeseer reverse proxy container
       ansible.builtin.import_role:
-        name: timeseer.docker.timeseer_reverse_proxy
+        name: timeseer.podman.timeseer_reverse_proxy
       when: timeseer_reverse_proxy_enable is defined and timeseer_reverse_proxy_enable
 
     - name: Run Traefik reverse proxy
       ansible.builtin.import_role:
-        name: timeseer.docker.traefik
+        name: timeseer.podman.traefik
       vars:
         traefik_letsencrypt_mail: "it-support@timeseer.ai"
         traefik_basic_auth_users: "{{ tsai_traefik_users + customer_traefik_users }}"
@@ -37,16 +37,16 @@ For more detailed information, visit the [Timeseer.AI website](https://www.times
 
 ## Installation
 
-### Installing timeseer.docker Collection with Ansible
+### Installing timeseer.podman Collection with Ansible
 
-To install the timeseer.docker Ansible collection, use the `ansible-galaxy` tool included with Ansible.
+To install the timeseer.podman Ansible collection, use the `ansible-galaxy` tool included with Ansible.
 
 #### Default Installation from Ansible Galaxy
 
 Install the latest version with the following command:
 
 ```bash
-$ ansible-galaxy collection install timeseer.docker
+$ ansible-galaxy collection install timeseer.podman
 ```
 
 ## Installing a Specific Version
@@ -54,7 +54,7 @@ $ ansible-galaxy collection install timeseer.docker
 To install a specific version, append the version number:
 
 ```bash
-$ ansible-galaxy collection install timeseer.docker:1.0.0
+$ ansible-galaxy collection install timeseer.podman:1.0.0
 ```
 
 ## Overwriting Existing Collections
@@ -62,7 +62,7 @@ $ ansible-galaxy collection install timeseer.docker:1.0.0
 Use --force to overwrite any existing collections:
 
 ```bash
-$ ansible-galaxy collection install --force timeseer.docker:1.0.0
+$ ansible-galaxy collection install --force timeseer.podman:1.0.0
 ```
 
 More information can be found in the [official Ansible documentation](https://docs.ansible.com/).

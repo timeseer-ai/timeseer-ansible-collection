@@ -1,0 +1,69 @@
+argument_specs:
+  traefik_setup:
+    short_description: Configure and run Traefik with optional Let's Encrypt and basic authentication
+    description:
+      - Sets up and runs Traefik in a podman container with options for SSL/TLS via Let's Encrypt and basic authentication.
+      - Handles configuration for Traefik including directories, networking, and optional features like exposing flight and reverse proxy.
+
+    options:
+      traefik_dir:
+        description:
+          - Directory for storing Traefik configuration and Let's Encrypt files.
+        type: str
+        default: "/opt/timeseer/traefik"
+
+      traefik_image:
+        description:
+          - The podman image to use for Traefik.
+        type: str
+        default: "traefik:v2.10"
+
+      traefik_network:
+        description:
+          - Name of the podman network to which Traefik should connect.
+        type: str
+        default: timeseer
+
+      traefik_journal_tag:
+        description:
+          - Tag used for logging in the Traefik container.
+        type: str
+        default: "TRAEFIK"
+
+      traefik_host:
+        description:
+          - Hostname for the Traefik service.
+        type: str
+        default: "localhost"
+
+      traefik_letsencrypt_mail:
+        description:
+          - Email address used for Let's Encrypt registration.
+          - Required for setting up SSL/TLS with Let's Encrypt.
+        type: str
+        required: true
+
+      traefik_basic_auth_enable:
+        description:
+          - Whether to enable basic authentication for Traefik.
+        type: bool
+        default: false
+
+      traefik_basic_auth_users:
+        description:
+          - List of users for basic authentication. Each entry should be in the format "username:hashedpassword".
+        type: list
+        elements: str
+        default: []
+
+      traefik_expose_flight:
+        description:
+          - Whether to expose flight interface on Traefik.
+        type: bool
+        default: false
+
+      traefik_timeseer_reverse_proxy_enable:
+        description:
+          - Whether to enable timeseer reverse proxy configuration in Traefik.
+        type: bool
+        default: false

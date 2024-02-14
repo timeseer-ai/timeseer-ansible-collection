@@ -1,0 +1,10 @@
+traefik_dir: "/opt/timeseer/traefik"
+traefik_image: "traefik:v2.10"
+traefik_network: timeseer
+traefik_journal_tag: "TRAEFIK"
+traefik_host: "localhost"
+traefik_letsencrypt_mail: ""
+traefik_basic_auth_enable: false
+traefik_basic_auth_users: []
+traefik_expose_flight: false
+traefik_timeseer_reverse_proxy_enable: false

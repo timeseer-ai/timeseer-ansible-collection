@@ -1,0 +1,7 @@
+---
+timeseer_reverse_proxy_dir: /opt/timeseer/reverse-proxy
+timeseer_reverse_proxy_image: localhost/timeseer:stable
+timeseer_reverse_proxy_network: timeseer
+timeseer_reverse_proxy_journal_tag: "TIMESEER-RP"
+timeseer_reverse_proxy_enable: false
+timeseer_reverse_proxy_config_dir: ""

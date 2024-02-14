@@ -1,0 +1,67 @@
+- name: Prepare a storage directory
+  ansible.builtin.file:
+    path: "{{ timeseer_dir }}/db"
+    owner: 1001
+    mode: "0755"
+    state: directory
+  when: timeseer_podman_volume | default('') | trim == ''
+
+- name: Prepare a read-only data directory
+  ansible.builtin.file:
+    path: "{{ timeseer_dir }}/data"
+    owner: 1001
+    mode: "0755"
+    state: directory
+
+- name: Set storage path to podman volume
+  ansible.builtin.set_fact:
+    timeseer_storage_mount: "{{ timeseer_podman_volume }}"
+  when: timeseer_podman_volume | default('') | trim != ''
+
+- name: Set storage path to timeseer default storage_path
+  ansible.builtin.set_fact:
+    timeseer_storage_mount: "{{ timeseer_db_dir }}/db"
+  when: timeseer_podman_volume | default('') | trim == ''
+
+- name: Create a podman network
+  containers.podman.podman_network:
+    name: "{{ timeseer_network }}"
+
+- name: Download demo data
+  containers.podman.podman_container:
+    name: timeseer-demo-data
+    auto_remove: true
+    detach: false
+    image: "{{ timeseer_image }}"
+    pull: true
+    command: "python -m timeseer.cli demo-data"
+    state: started
+    volumes:
+      - "{{ timeseer_dir }}/data:/usr/src/app/data"
+    log_driver: journald
+    log_options:
+      tag: "{{ timeseer_journal_tag }}"
+    tty: true
+  when: timeseer_download_demo_data
+
+- name: Run Timeseer in a podman container
+  containers.podman.podman_container:
+    name: timeseer
+    image: "{{ timeseer_image }}"
+    state: started
+    restart_policy: unless-stopped
+    network: "{{timeseer_network}}"
+    volumes: "{{ volume_list }}"
+    log_driver: journald
+    user: "1001"
+    log_options:
+      tag: "{{ timeseer_journal_tag }}"
+    tty: true
+    ports: "{{ timeseer_ports if timeseer_ports and timeseer_ports != '' else omit }}"
+  vars:
+    base_volumes:
+      - "{{ timeseer_dir }}/data:/usr/src/app/data"
+      - "{{ timeseer_storage_mount }}:/usr/src/app/db{{ ':z' if ansible_selinux['status'] == 'enabled' else '' }}"
+    custom_toml_volume:
+      - "{{ timeseer_config_dir }}:/usr/src/app/config/:ro{{ ':z' if ansible_selinux['status'] == 'enabled' else '' }}"
+    volume_list: "{{ base_volumes + (custom_toml_volume if timeseer_config_dir | default('') | trim != '' else []) }}"

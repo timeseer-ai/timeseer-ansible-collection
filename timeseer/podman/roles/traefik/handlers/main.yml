@@ -1,0 +1,7 @@
+- name: Restart Traefik Container
+  ansible.builtin.set_fact:
+    traefik_recreate_container: true
+  with_items: "{{ traefik_config.results }}"
+  when: item is changed
+  loop_control:
+    label: "{{ item.dest }}"

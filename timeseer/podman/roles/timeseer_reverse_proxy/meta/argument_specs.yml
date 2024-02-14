@@ -1,0 +1,44 @@
+argument_specs:
+  timeseer_reverse_proxy_setup:
+    short_description: Configure and run the timeseer Reverse Proxy
+    description:
+      - Sets up the necessary environment and runs the timeseer Reverse Proxy in a podman container.
+      - Manages the configuration directory, environment variables file, and podman container deployment.
+
+    options:
+      timeseer_reverse_proxy_dir:
+        description:
+          - Directory for storing the timeseer Reverse Proxy configurations and environment variables.
+        type: str
+        default: "/opt/timeseer/reverse-proxy"
+
+      timeseer_reverse_proxy_image:
+        description:
+          - The podman image to use for the timeseer Reverse Proxy.
+        type: str
+        default: "docker.timeseer.ai/timeseer"
+
+      timeseer_reverse_proxy_network:
+        description:
+          - Name of the podman network to which the timeseer Reverse Proxy should connect.
+        type: str
+        default: "timeseer"
+
+      timeseer_reverse_proxy_journal_tag:
+        description:
+          - Tag used for logging in the timeseer Reverse Proxy container.
+        type: str
+        default: "timeseer-RP"
+
+      timeseer_reverse_proxy_enable:
+        description:
+          - Whether to enable the timeseer Reverse Proxy.
+        type: bool
+        default: false
+
+      timeseer_reverse_proxy_config_dir:
+        description:
+          - Optional directory for custom configuration files for the timeseer Reverse Proxy.
+          - If not defined, the default directory is used.
+        type: str
+        default: ""

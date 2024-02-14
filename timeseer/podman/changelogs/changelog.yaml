@@ -1,0 +1,20 @@
+releases:
+  1.0.0:
+    release_date: "2024-01-18"
+    changes:
+      release_summary: |
+        timeseer 1.0.0: Redefining Data Analysis
+
+        This is the initial stable release of the timeseer Ansible Collection.
+        It contains roles for installing and configuring timeseer on a docker container
+
+      Key Features:
+        - Simplified installation and configuration of timeseer in Docker, making it accessible for a wide range of users.
+  1.0.1:
+    release_date: "2024-02-13"
+    changes:
+      release_summary: |
+        timeseer 1.0.1: Enhancing Configuration Flexibility
+
+      Key Features:
+        - Added the `timeseer_ports` variable, enabling users to specify custom ports for the timeseer container.

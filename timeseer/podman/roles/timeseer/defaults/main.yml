@@ -1,0 +1,9 @@
+timeseer_dir: /opt/timeseer
+timeseer_db_dir: /opt/timeseer
+timeseer_podman_volume: ""
+timeseer_image: localhost/timeseer:stable
+timeseer_config_dir: ""
+timeseer_ports: ""
+timeseer_network: timeseer
+timeseer_journal_tag: "TIMESEER"
+timeseer_download_demo_data: false
