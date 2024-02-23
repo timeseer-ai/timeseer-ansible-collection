@@ -54,7 +54,7 @@ $ ansible-galaxy collection install timeseer.docker
 To install a specific version, append the version number:
 
 ```bash
-$ ansible-galaxy collection install timeseer.docker:1.0.0
+$ ansible-galaxy collection install timeseer.docker:1.0.2
 ```
 
 ## Overwriting Existing Collections
@@ -62,7 +62,7 @@ $ ansible-galaxy collection install timeseer.docker:1.0.0
 Use --force to overwrite any existing collections:
 
 ```bash
-$ ansible-galaxy collection install --force timeseer.docker:1.0.0
+$ ansible-galaxy collection install --force timeseer.docker:1.0.2
 ```
 
 More information can be found in the [official Ansible documentation](https://docs.ansible.com/).
