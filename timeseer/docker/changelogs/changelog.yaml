@@ -18,3 +18,13 @@ releases:
 
       Key Features:
         - Added the `timeseer_ports` variable, enabling users to specify custom ports for the timeseer container.
+  1.0.2:
+    release_date: "2024-02-23"
+    changes:
+      release_summary: |
+        timeseer 1.0.2: Podman Support and Improved Usability
+
+        Expanding on our commitment to provide flexible and accessible data analysis tools, this release introduces support for Podman, offering an alternative to Docker for container management. This update facilitates users who prefer or require Podman for containerization, enhancing the versatility of the timeseer Ansible Collection.
+
+      Key Features:
+        - Introduced the `timeseer_podman` roles, enabling seamless deployment of timeseer with Podman.
