@@ -33,7 +33,7 @@
   notify: Restart Traefik Container
 
 - name: Run in a Docker container
-  community.docker.docker_container::
+  community.docker.docker_container:
     name: traefik
     image: "{{ traefik_image }}"
     pull: true
