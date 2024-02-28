@@ -32,10 +32,11 @@
   register: traefik_config
   notify: Restart Traefik Container
 
-- name: Run in a Podman container
-  containers.podman.podman_container:
+- name: Run in a Docker container
+  community.docker.docker_container::
     name: traefik
     image: "{{ traefik_image }}"
+    pull: true
     state: started
     recreate: "{{ traefik_recreate_container }}"
     restart_policy: unless-stopped
