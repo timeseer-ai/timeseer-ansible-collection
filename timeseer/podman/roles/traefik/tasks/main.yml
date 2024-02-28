@@ -1,7 +1,7 @@
 - name: Fail when no Let's Encrypt mail has been configured
   ansible.builtin.fail:
     msg: 'variable "traefik_letsencrypt_mail" not set'
-  when: traefik_letsencrypt_mail is not defined or traefik_letsencrypt_mail | trim | count == 0
+  when: traefik_letsencrypt_mail is not defined or traefik_letsencrypt_mail | trim == ''
 
 - name: Prepare configuration directory
   ansible.builtin.file:
@@ -12,6 +12,12 @@
 - name: Prepare directory for Let's Encrypt
   ansible.builtin.file:
     path: "{{ traefik_dir }}/acme"
+    mode: "0755"
+    state: directory
+
+- name: Prepare directory for using own certs
+  ansible.builtin.file:
+    path: "{{ traefik_dir }}/certs"
     mode: "0755"
     state: directory
 
@@ -41,7 +47,7 @@
     volumes:
       - "{{ traefik_dir }}/traefik.yml:/etc/traefik/traefik.yml"
       - "{{ traefik_dir }}/traefik-timeseer.yml:/etc/traefik/traefik-timeseer.yml"
-      - "{{ traefik_dir }}/acme:/etc/traefik/acme"
+      - "{{ traefik_dir }}/{{ 'acme' if traefik_tls == 'acme' else 'certs' }}:/etc/traefik/{{ 'acme' if traefik_tls == 'acme' else 'certs' }}{{ ':z' if ansible_selinux.status == 'enabled' else '' }}"
     log_driver: journald
     log_options:
       tag: "{{ traefik_journal_tag }}"

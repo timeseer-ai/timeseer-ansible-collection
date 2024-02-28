@@ -1,5 +1,3 @@
----
-
 log:
   level: INFO
 
@@ -8,7 +6,7 @@ accessLog:
 
 providers:
   file:
-    filename: "/etc/traefik/traefik-timeseer.yml"
+     filename: "/etc/traefik/traefik-timeseer.yml"
 
 entryPoints:
   http:
@@ -25,6 +23,7 @@ entryPoints:
     address: ":8443"
 {% endif %}
 
+
 certificatesResolvers:
   timeseer-le:
     acme:
@@ -32,3 +31,8 @@ certificatesResolvers:
       storage: "/etc/traefik/acme/acme.json"
       httpChallenge:
         entryPoint: http
+
+
+
+
+    
