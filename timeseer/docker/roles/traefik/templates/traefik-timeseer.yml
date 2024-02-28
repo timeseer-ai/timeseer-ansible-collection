@@ -25,9 +25,8 @@ http:
       basicAuth:
         users:
 {% for user in traefik_basic_auth_users %}
-          - {{ user }}
+          - "{{ user }}"
 {% endfor %}
-
         headerField: "X-Forwarded-User"
 {% endif %}
 
@@ -44,10 +43,15 @@ http:
 {% else %}
       service: reverseProxy
 {% endif %}
+{% if  traefik_tls == "acme" %}
       rule: "Host(`{{ traefik_host }}`)"
       tls:
         certResolver: timeseer-le
-{% if traefik_expose_flight %}
+{% elif traefik_tls =="certs" %}
+      rule: "Host(`{{ traefik_host }}`)"
+      tls: {}
+{% endif %}
+{% if traefik_expose_flight and traefik_tls == "acme" %}
     flight:
       entryPoints:
       - "flight"
@@ -55,4 +59,20 @@ http:
       rule: "Host(`{{ traefik_host }}`)"
       tls:
         certResolver: timeseer-le
+{% elif traefik_expose_flight and traefik_tls == "certs" %}
+    flight:
+      entryPoints:
+      - "flight"
+      service: flight
+      rule: "Host(`{{ traefik_host }}`)"
+      tls: {}
 {% endif %}
+
+{% if traefik_tls == "certs" %}
+tls:
+  certificates:
+    - certFile: "/etc/traefik/certs/{{ traefik_cert_file_name }}"
+      keyFile: "/etc/traefik/certs/{{ traefik_key_file_name }}"
+{% endif %}
+
+
