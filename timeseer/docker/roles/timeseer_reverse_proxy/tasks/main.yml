@@ -28,5 +28,5 @@
     tty: true
   vars:
     custom_toml_volume:
-      - "{{ timeseer_reverse_proxy_config_dir | default(timeseer_reverse_proxy_dir) }}:/usr/src/app/proxy-config/:ro"
+      - "{{ timeseer_reverse_proxy_config_dir | default(timeseer_reverse_proxy_dir) }}:/usr/src/app/proxy-config{{ ':z' if ansible_selinux['status'] == 'enabled' else '' }}"
     reverse_proxy_volume_list: "{{ custom_toml_volume if timeseer_reverse_proxy_config_dir | default('') | trim != '' else [] }}"

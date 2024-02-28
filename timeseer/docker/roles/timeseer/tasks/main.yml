@@ -61,7 +61,7 @@
   vars:
     base_volumes:
       - "{{ timeseer_dir }}/data:/usr/src/app/data"
-      - "{{ timeseer_storage_mount }}:/usr/src/app/db"
+      - "{{ timeseer_storage_mount }}:/usr/src/app/db{{ ':z' if ansible_selinux['status'] == 'enabled' else '' }}"
     custom_toml_volume:
       - "{{ timeseer_config_dir }}:/usr/src/app/config/:ro"
     volume_list: "{{ base_volumes + (custom_toml_volume if timeseer_config_dir | default('') | trim != '' else []) }}"
