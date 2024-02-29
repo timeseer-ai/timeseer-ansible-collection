@@ -49,6 +49,7 @@
     name: timeseer
     image: "{{ timeseer_image }}"
     state: started
+    pull: "{{ timeseer_image_pull }}"
     restart_policy: unless-stopped
     networks:
       - name: "{{ timeseer_network }}"

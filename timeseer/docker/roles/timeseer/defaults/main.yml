@@ -7,3 +7,4 @@ timeseer_ports: ""
 timeseer_network: timeseer
 timeseer_journal_tag: "TIMESEER"
 timeseer_download_demo_data: false
+timeseer_image_pull: true

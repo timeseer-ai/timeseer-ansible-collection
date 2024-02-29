@@ -30,9 +30,11 @@
     - "traefik.yml"
     - "traefik-timeseer.yml"
   register: traefik_config
-  notify: Restart Traefik Container
+  notify:
+    - Signal Traefik Restart
+    - Restart Traefik
 
-- name: Run in a Podman container
+- name: Run in Trefik a Podman container
   containers.podman.podman_container:
     name: traefik
     image: "{{ traefik_image }}"

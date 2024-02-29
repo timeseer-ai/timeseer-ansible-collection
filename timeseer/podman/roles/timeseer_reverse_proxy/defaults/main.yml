@@ -5,3 +5,4 @@ timeseer_reverse_proxy_network: timeseer
 timeseer_reverse_proxy_journal_tag: "TIMESEER-RP"
 timeseer_reverse_proxy_enable: false
 timeseer_reverse_proxy_config_dir: ""
+timeseer_reverse_proxy_image_pull: true

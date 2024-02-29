@@ -30,7 +30,9 @@
     - "traefik.yml"
     - "traefik-timeseer.yml"
   register: traefik_config
-  notify: Restart Traefik Container
+  notify:
+    - Signal Traefik Restart
+    - Restart Traefik
 
 - name: Run in a Docker container
   community.docker.docker_container:
