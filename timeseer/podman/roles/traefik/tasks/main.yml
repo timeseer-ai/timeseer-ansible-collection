@@ -34,7 +34,7 @@
     - Signal Traefik Restart
     - Restart Traefik
 
-- name: Run in Trefik a Podman container
+- name: Run traefik in a Podman container
   containers.podman.podman_container:
     name: traefik
     image: "{{ traefik_image }}"
