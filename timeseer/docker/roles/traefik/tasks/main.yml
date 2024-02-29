@@ -25,7 +25,7 @@
   ansible.builtin.template:
     src: "{{ item }}"
     dest: "{{ traefik_dir }}/{{ item }}"
-    mode: "0755"
+    mode: "0644"
   loop:
     - "traefik.yml"
     - "traefik-timeseer.yml"
