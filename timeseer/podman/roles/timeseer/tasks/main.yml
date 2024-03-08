@@ -33,7 +33,6 @@
     auto_remove: true
     detach: false
     image: "{{ timeseer_image }}"
-    pull: true
     command: "python -m timeseer.cli demo-data"
     state: started
     volumes:
@@ -49,7 +48,6 @@
     name: timeseer
     image: "{{ timeseer_image }}"
     state: started
-    pull: "{{ timeseer_image_pull }}"
     restart_policy: unless-stopped
     network: "{{timeseer_network}}"
     volumes: "{{ volume_list }}"
