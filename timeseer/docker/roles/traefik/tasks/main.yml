@@ -1,7 +1,9 @@
 - name: Fail when no Let's Encrypt mail has been configured
   ansible.builtin.fail:
     msg: 'variable "traefik_letsencrypt_mail" not set'
-  when: traefik_letsencrypt_mail is not defined or traefik_letsencrypt_mail | trim == ''
+  when:
+    - (traefik_letsencrypt_mail is not defined or traefik_letsencrypt_mail | trim == '')
+    - traefik_tls == "acme"
 
 - name: Prepare configuration directory
   ansible.builtin.file:
