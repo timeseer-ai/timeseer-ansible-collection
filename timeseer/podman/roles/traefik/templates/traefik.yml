@@ -26,6 +26,7 @@ entryPoints:
 {% endif %}
 
 
+{% if  traefik_tls == "acme" %}
 certificatesResolvers:
   timeseer-le:
     acme:
@@ -33,3 +34,4 @@ certificatesResolvers:
       storage: "/etc/traefik/acme/acme.json"
       httpChallenge:
         entryPoint: http
+{% endif %}        
