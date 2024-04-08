@@ -16,12 +16,19 @@ This Ansible role is designed for deploying and configuring Traefik, a modern HT
 
 This role uses several variables, a few of which are listed below. For complete details, see `defaults/main.yml`:
 
-- `traefik_letsencrypt_mail`: Email address used for Let's Encrypt notifications. This is a mandatory variable.
+- `traefik_letsencrypt_mail`: Email address used for Let's Encrypt notifications. This is a mandatory variable if you are using the ACME protocol
 - `traefik_dir`: Base directory for Traefik configurations and certificates.
 - `traefik_image`: podman image for Traefik.
 - `traefik_network`: podman network for Traefik.
 - `traefik_journal_tag`: Tag for journal logging.
 - `traefik_recreate_container` (default: false): Flag to determine if the Traefik container should be recreated on playbook runs.
+- `traefik_host`: Hostname for the Traefik service.
+- `traefik_basic_auth_users`: List of users for basic authentication. Each entry should be in the format "username:hashedpassword".
+- `traefik_expose_flight`: Whether to expose flight interface on Traefik.
+- `traefik_timeseer_reverse_proxy_enable`: Whether to enable timeseer reverse proxy configuration in Traefik.
+
+
+
 
 ## Dependencies
 
