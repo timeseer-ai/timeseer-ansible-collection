@@ -67,3 +67,19 @@ argument_specs:
           - Whether to enable timeseer reverse proxy configuration in Traefik.
         type: bool
         default: false
+
+      traefik_tls:
+        description:
+          - Determines the method for obtaining SSL/TLS certificates. Use "ACME" to automatically obtain certificates using the ACME protocol. Use "certs" if you prefer to use your own pre-existing certificates.
+        type: str
+        default: "ACME"
+
+      traefik_cert_file_name:
+        description:
+          - Specifies the file path where your SSL/TLS certificate is located. This is used when you choose to use your own certificates.
+        type: str
+
+      traefik_key_file_name:
+        description:
+          - Specifies the file path where your private key is located. This is necessary when using your own SSL/TLS certificates.
+        type: str

@@ -26,6 +26,10 @@ This role uses several variables, a few of which are listed below. For complete 
 - `traefik_basic_auth_users`: List of users for basic authentication. Each entry should be in the format "username:hashedpassword".
 - `traefik_expose_flight`: Whether to expose flight interface on Traefik.
 - `traefik_timeseer_reverse_proxy_enable`: Whether to enable timeseer reverse proxy configuration in Traefik.
+- `traefik_tls`: Determines the method for obtaining SSL/TLS certificates. Use ACME to automatically obtain certificates using the ACME protocol. Use certs if you prefer to use your own pre-existing certificates.
+- `traefik_cert_file_name`: Specifies the file path where your SSL/TLS certificate is located. This is used when you choose to use your own certificates.
+- `traefik_key_file_name`: Specifies the file path where your private key is located. This is necessary when using your own SSL/TLS certificates.
+
 
 
 

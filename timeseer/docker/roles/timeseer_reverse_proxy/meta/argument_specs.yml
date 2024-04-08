@@ -42,3 +42,10 @@ argument_specs:
           - If not defined, the default directory is used.
         type: str
         default: ""
+
+      timeseer_reverse_proxy_ports:
+        description:
+          - Specifies the ports that the timeseer Reverse Proxy container will listen on.
+          - Ports should be defined in a comma-separated list, e.g., "8080,8443" for HTTP and HTTPS respectively.
+      type: str
+      default: ""

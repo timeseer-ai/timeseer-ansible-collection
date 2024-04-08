@@ -21,6 +21,7 @@ The role utilizes several variables, a few of which are outlined below. For a fu
 - `timeseer_reverse_proxy_image`: Docker image for the Timeseer reverse proxy.
 - `timeseer_reverse_proxy_config_dir` (default: ''): Optional directory for custom reverse proxy configurations.
 - `timeseer_reverse_proxy_journal_tag`: Tag for journal logging.
+- `timeseer_reverse_proxy_ports`: Specifies the ports that the timeseer Reverse Proxy container will listen on.
 
 ## Dependencies
 
