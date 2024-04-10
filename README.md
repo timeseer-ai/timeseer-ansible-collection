@@ -11,8 +11,16 @@ For more detailed information, visit the [Timeseer.AI website](https://www.times
 - Ansible 2.9 or higher.
 - docker installed on the target machine.
 - `community.docker` Ansible collection.
+- `containers.podman collection` Ansible collection if you are using podman
 
 ## Example Playbook
+
+The Timeseer Ansible collection includes three roles.
+
+The `timeseer` role is recommended for deploying just the Docker container. It is suitable for a limited proof of concept (POC) with 1-2 users. It does not require authentication or any web server and can be run locally. However, it is recommended to use a sufficiently powerful machine for a good experience. Although it is a  container, it cannot be utilized on Azure Web Apps.
+
+
+After installing the collection, import the role using the following YAML:
 
 ```yaml
 - hosts: your_target_hosts
@@ -20,19 +28,42 @@ For more detailed information, visit the [Timeseer.AI website](https://www.times
     - name: Run Timeseer container
       ansible.builtin.import_role:
         name: timeseer.docker.timeseer
+```
 
-    - name: Run Timeseer reverse proxy container
-      ansible.builtin.import_role:
-        name: timeseer.docker.timeseer_reverse_proxy
-      when: timeseer_reverse_proxy_enable is defined and timeseer_reverse_proxy_enable
+The `timeseer_reverse_proxy` is used when you want a more robust deployment. Timeseer ships with a reverse proxy by default. The reverse proxy is deployed using another Timeseer container, and the configurations are specified in the TOML file.
 
-    - name: Run Traefik reverse proxy
-      ansible.builtin.import_role:
-        name: timeseer.docker.traefik
-      vars:
-        traefik_letsencrypt_mail: "it-support@timeseer.ai"
-        traefik_basic_auth_users: "{{ tsai_traefik_users + customer_traefik_users }}"
-        traefik_expose_flight: true
+To redirect connections to the reverse proxy, you will need to modify the TOML file that comes by default with the container. The default name of the config file is `Timeseer-reverse-proxy.toml`.
+
+Example:
+
+```toml
+[timeseer]
+url = "http://localhost:8080"
+```
+In the example above, the URL is the host of your Timeseer instance.
+
+You can also use any TOML file if you use our drop-in `proxy-config` variable. Set it, and you can use any TOML file that's inside this directory for the reverse proxy. 
+
+The reverse proxy is capable of terminating SSL and authenticating users using an Azure AD, Google, or SAML Identity Provider. With the reverse proxy, you can enable multi-tenancy, allowing more users to operate different flows in the same environment.
+
+Below is a sample TOML file with authentication and certificates:
+
+```toml
+[AzureAD]
+application_id = "" # Application (client) ID of the registered application
+secret = "" # Client secret
+secret_env = "" # Environment variable containing the client secret
+tenant = "" # The Tenant ID of the application
+key = "" # Path to file containing PEM-encoded key
+certificate = "" # Path to file containing PEM-encoded certificate(s)
+```
+
+Import the role using the following YAML:
+
+```yaml
+- name: Run Timeseer reverse proxy container
+  ansible.builtin.import_role:
+    name: timeseer.docker.timeseer_reverse_proxy
 ```
 
 ## Installation
