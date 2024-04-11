@@ -18,14 +18,14 @@ This role uses several variables, a few of which are listed below. For complete 
 
 - `traefik_letsencrypt_mail`: Email address used for Let's Encrypt notifications. This is a mandatory variable if you are using the ACME protocol
 - `traefik_dir`: Base directory for Traefik configurations and certificates.
-- `traefik_image`: podman image for Traefik.
-- `traefik_network`: podman network for Traefik.
+- `traefik_image`: docker image for Traefik.
+- `traefik_network`: docker network for Traefik.
 - `traefik_journal_tag`: Tag for journal logging.
 - `traefik_recreate_container` (default: false): Flag to determine if the Traefik container should be recreated on playbook runs.
 - `traefik_host`: Hostname for the Traefik service.
 - `traefik_basic_auth_users`: List of users for basic authentication. Each entry should be in the format "username:hashedpassword".
-- `traefik_expose_flight`: Whether to expose flight interface on Traefik.
-- `traefik_timeseer_reverse_proxy_enable`: Whether to enable timeseer reverse proxy configuration in Traefik.
+- `traefik_expose_flight`: wether to expose flight interface on Traefik.
+- `traefik_timeseer_reverse_proxy_enable`: wether to enable timeseer reverse proxy configuration in Traefik.
 - `traefik_tls`: Determines the method for obtaining SSL/TLS certificates. Use ACME to automatically obtain certificates using the ACME protocol. Use certs if you prefer to use your own pre-existing certificates.
 - `traefik_cert_file_name`: Specifies the file path where your SSL/TLS certificate is located. This is used when you choose to use your own certificates.
 - `traefik_key_file_name`: Specifies the file path where your private key is located. This is necessary when using your own SSL/TLS certificates.
