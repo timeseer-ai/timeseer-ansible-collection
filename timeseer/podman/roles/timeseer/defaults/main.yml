@@ -1,7 +1,7 @@
 timeseer_dir: /opt/timeseer
 timeseer_db_dir: /opt/timeseer
 timeseer_podman_volume: ""
-timeseer_image: docker.timeseer.ai/timeseer
+timeseer_image: container.timeseer.ai/timeseer
 timeseer_config_dir: ""
 timeseer_ports: ""
 timeseer_network: timeseer

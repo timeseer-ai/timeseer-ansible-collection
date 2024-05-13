@@ -1,0 +1,29 @@
+- name: Prepare a storage directory for ts-data-service
+  file:
+    path: "{{ timeseer_data_service_dir }}"
+    state: directory
+    owner: 1001
+    mode: "0755"
+
+- name: Run ts-data-service as a container
+  community.docker.docker_container:
+    name: timeseer-data-service
+    image: "{{ timeseer_data_service_image }}"
+    command: "/usr/bin/timeseer-data-service"
+    state: started
+    restart_policy: unless-stopped
+    networks:
+      - name: "{{ timeseer_data_service_network }}"
+    log_driver: journald
+    log_options:
+      tag: "{{ timeseer_data_service_journal_tag }}"
+    env:
+      RUST_LOG: info
+    tty: true
+    ports: "{{timeseer_data_service_ports}}"
+  vars:
+    base_volumes:
+      - "{{ timeseer_data_service_dir }}:/usr/src/app/data-service"
+    custom_toml_volume:
+      - "{{ timeseer_data_service_toml_dir }}:/usr/src/app/:ro"
+    volume_list: "{{ base_volumes + (custom_toml_volume if timeseer_config_dir | default('') | trim != '' else []) }}"
