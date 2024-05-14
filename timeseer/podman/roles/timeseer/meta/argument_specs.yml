@@ -30,7 +30,7 @@ argument_specs:
         description:
           - The podman image to use for timeseer.
         type: str
-        default: "podman.timeseer.ai/timeseer"
+        default: "container.timeseer.ai/timeseer"
 
       timeseer_config_dir:
         description:
