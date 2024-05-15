@@ -12,6 +12,13 @@ argument_specs:
         type: str
         default: "/opt/timeseer/data-service"
 
+      timeseer_data_service_docker_volume:
+        description:
+          - Optional Docker volume for timeseer_data_service  storage.
+          - If defined, it is used as the primary storage path.
+        type: str
+        default: ""
+
       timeseer_data_service_toml_dir:
         description:
           - Optional directory for a TOML configuration file for the Timeseer data service.
