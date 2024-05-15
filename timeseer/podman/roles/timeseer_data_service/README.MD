@@ -17,7 +17,7 @@ This Ansible role is designed to deploy and configure the Timeseer Data Service 
 Variables used in this role are listed below, along with default values (see `defaults/main.yml`):
 
 - `timeseer_data_service_dir` (default: "/opt/timeseer/data-service"): The directory for the Timeseer Data Service.
-- `timeseer_data_service_docker_volume` (default: ''): Optional Docker volume for Timeseer data service storage.
+- `timeseer_data_service_podman_volume` (default: ''): Optional Docker volume for Timeseer data service storage.
 - `timeseer_data_service_toml_dir` (default: ""): Optional directory for TOML configuration files.
 - `timeseer_data_service_enable` (default: false): Boolean to enable or disable the data service.
 - `timeseer_data_service_image` (default: "container.timeseer.ai/timeseer"): Podman image used for the Timeseer Data Service.

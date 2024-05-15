@@ -8,12 +8,12 @@
 - name: Set storage path to podman volume
   ansible.builtin.set_fact:
     timeseer-data-service_storage_mount: "{{ timeseer_data_service_docker_volume }}"
-  when: timeseer_data_service_docker_volume | default('') | trim != ''
+  when: timeseer_data_service_podman_volume | default('') | trim != ''
 
 - name: Set storage path to timeseer default storage_path
   ansible.builtin.set_fact:
     timeseer-data-service_storage_mount: "{{ timeseer_data_service_dir }}"
-  when: timeseer_data_service_docker_volume | default('') | trim == ''
+  when: timeseer_data_service_podman_volume | default('') | trim == ''
 
 - name: Run ts-data-service as a container
   community.docker.docker_container:

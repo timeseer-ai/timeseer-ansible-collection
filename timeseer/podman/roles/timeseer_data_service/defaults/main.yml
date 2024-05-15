@@ -1,5 +1,6 @@
 ---
 timeseer_data_service_dir: "/opt/timeseer/data-service"
+timeseer_data_service_podman_volume: ""
 timeseer_data_service_toml_dir: ""
 timeseer_data_service_enable: false
 timeseer_data_service_image: "container.timeseer.ai/timeseer"
