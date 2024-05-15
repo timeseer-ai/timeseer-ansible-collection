@@ -8,7 +8,7 @@ argument_specs:
     options:
       timeseer_data_service_dir:
         description:
-          - Directory for storing the Timeseer data service configurations.
+          - Directory for storing the Timeseer data service data.
         type: str
         default: "/opt/timeseer/data-service"
 
@@ -39,7 +39,7 @@ argument_specs:
 
       timeseer_data_service_network:
         description:
-          - Name of the Docker network to which the Timeseer data service should connect.
+          - Name of the Docker network to which the Timeseer data service container should be attached.
         type: str
         default: "timeseer"
 

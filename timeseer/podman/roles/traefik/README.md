@@ -44,7 +44,7 @@ Here's an example of how to include this role in a playbook:
 
 ```yaml
 - hosts: timeseer-server
-  roles:
+  import_role:
     - timeseer.podman.traefik
 ```
 
