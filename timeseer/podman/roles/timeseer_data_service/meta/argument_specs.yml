@@ -14,7 +14,7 @@ argument_specs:
 
       timeseer_data_service_podman_volume:
         description:
-          - Optional Docker volume for timeseer_data_service  storage.
+          - Optional podman volume for timeseer_data_service  storage.
           - If defined, it is used as the primary storage path.
         type: str
         default: ""
@@ -41,8 +41,8 @@ argument_specs:
       timeseer_data_service_ports:
         description:
           - Specifies the ports that the Timeseer data service container will listen on.
-        type: str
-        default: "3000:3000"
+        type: list
+        default: []
 
       timeseer_data_service_network:
         description:

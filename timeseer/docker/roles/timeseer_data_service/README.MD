@@ -21,7 +21,9 @@ Variables used in this role are listed below, along with default values (see `de
 - `timeseer_data_service_toml_dir` (default: ""): Optional directory for TOML configuration files.
 - `timeseer_data_service_enable` (default: false): Boolean to enable or disable the data service.
 - `timeseer_data_service_image` (default: "container.timeseer.ai/timeseer"): docker image used for the Timeseer Data Service.
-- `timeseer_data_service_ports` (default: "3000:3000"): Port mappings for the service. Modify using Docker CLI syntax, such as "3003:3000", "0.0.0.0:3003:3000", where "3003" can be an example of a host port and "3000" is the container port.
+- `timeseer_data_service_ports` (default: []): Port mappings for the service. Modify using Docker CLI syntax, such as
+     - "3003:3000" (maps host port 3003 to container port 3000)
+     - "0.0.0.0:3003:3000" (binds host port 3003 on all interfaces to container port 3000)
 - `timeseer_data_service_network` (default: "timeseer"): docker network to which the service connects.
 - `timeseer_data_service_journal_tag` (default: "TIMESEER-DS"): Tag used for logging purposes.
 - `timeseer_data_service_image_pull` (default: true): Whether to pull the latest docker image.
