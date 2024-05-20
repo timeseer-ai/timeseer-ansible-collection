@@ -18,96 +18,174 @@ For more detailed information, visit the [Timeseer.AI website](https://www.times
 
 The Timeseer Ansible collection includes four roles.
 
+The `timeseer` role is primarily designed for deploying just the Docker container and is ideal for a limited proof of concept (POC) involving 1-2 users. This setup does not require authentication or a web server and can be run locally. However, for an optimal experience, it is recommended to use a sufficiently powerful machine.
 
-The `timeseer` role is primarily designed for deploying just the Docker container and is ideal for a limited proof of concept (POC) involving 1-2 users. This setup does not require authentication or a web server and can be run locally. However, for an optimal experience, it is recommended to use a sufficiently powerful machine. 
+By default, this role creates a directory at `/opt/timeseer`. Within this directory, it also creates `db` and `data` subdirectories for your database and data on your local machine. The default variable definitions can be modified to fit your system requirements. Use the variable `timeseer_dir` to change the default directory.
 
-Timeseer uses TOML files for its configuration. Below is an example
+Timeseer uses TOML files for configuration, and the container includes a default configuration file. However, you will likely need to add your own configuration files. You can use the `timeseer_config_dir` variable to define a directory where you can add TOML files, which will be included in the configuration.
+
+Here is an example source file. You can define a source using TOML. For more information on how to set up sources, please refer to our documentation.
+
+
 
 ```toml
-data_dir = "db"
+[source.example-row]
+type = "csv"
+format = "row"
+path = "/usr/src/app/data/example-row.csv" 
+header_row = true
+tag_columns = ["location", "plant"]  
+field_columns = ["product", "value"]  
 
-[analysis]
-workers = 4
-
-[[include]]
-glob = "data/*.toml"
-
-[[include]]
-glob = "config/*.toml"
+[source.example-row.column_mapping]
+"ts" = "ts"
+"value" = "value"
 ```
 
-The container comes with a default configuration file, but if you wish to modify it, you can use the `timeseer_config_dir` variable. Any TOML files placed in this directory will be automatically included in the configuration.
+And here is the example-row.csv:
 
+```csv
+location,plant,ts,product,value
+Antwerp,P1,2020-01-01T00:00:00Z,A,1
+Antwerp,P2,2020-01-01T00:00:00Z,A,1
+Antwerp,P1,2020-01-02T00:00:00Z,A,2
+Antwerp,P1,2020-01-03T00:00:00Z,B,1
+Antwerp,P2,2020-01-03T00:00:00Z,A,2
+```
 
-For a quick test, set `timeseer_ports` to a local unused port, and you can access Timeseer at `localhost:<port>`.
+To run a simple Docker container Proof of Concept (PoC) using this role, you will need to expose the VM ports. You can use the `timeseer_ports` variable for this purpose. Set the `timeseer_ports` variable to an unused local port, and you will be able to access Timeseer at `localhost:<port>`.
 
-
-After installing the collection, import the role using the following YAML:
+Here is an example of a full YAML configuration with the default directories and exposing port 8080 on the host to 8080 on the container:
 
 ```yaml
-- hosts: your_target_hosts
+- name: Setup Timeseer environment
+  hosts: test
+  become: true
+  vars:
+    timeseer_config_dir: "/opt/timeseer/config"
+    timeseer_ports: 8080:8080
+
   tasks:
-    - name: Run Timeseer container
+    - name: Import Timeseer Docker role
       ansible.builtin.import_role:
-        name: timeseer.docker.timeseer
+        name: "timeseer.docker.timeseer"
 ```
 
----
 
-The `timeseer_reverse_proxy` is deployed when a more robust setup is desired. By default, Timeseer includes a reverse proxy, which is facilitated through another Timeseer container. The configurations for this are specified in a TOML file.
 
-To redirect connections through the reverse proxy, you need to modify the default TOML file provided with the container. The configuration file is  named `Timeseer-reverse-proxy.toml`.
+
+### Timeseer Reverse Proxy role Configuration Guide
+
+When a more robust setup is desired, deploying the `timeseer_reverse_proxy` is recommended. By default, Timeseer includes a reverse proxy facilitated through another Timeseer container.
+the  `timeseer_reverse_proxy` role creates a default directory on your system located at `/opt/timeseer/reverse-proxy` to change the directory to one of your preferece use the 
+`timeseer_reverse_proxy_dir` variable
+
+he will also create a directory for a secret file that we use to add a secret used for authentication through Azure AD, Google, or a SAML Identity Provider  relative to `timeseer_reverse_proxy_dir/env` is optional to use this file but is recommended as it keeps your secrets from accidently being commited to a repository.
+
+
+To configure the reverse proxy to work with your environment, you will also need  to configure a TOML file. 
+
+The `timeseer_reverse_proxy_config_dir:` variable can be used as a drop-in directory where you can add TOML files that will be included in the configuration.
+
+
+
+
 
 **Example Configuration:**
+
+In the example bellow, the URL specifies the DNS name of your Timeseer instance within the Docker network.
+
 
 ```toml
 [timeseer]
 url = "http://timeseer:8080"
 ```
 
-In the example above, the URL specifies the DNS name of your Timeseer instance within the Docker network. By default, the reverse proxy listens on port 8000. You can map an external port to this service using the variable `timeseer_reverse_proxy_ports`:
+By default, the reverse proxy listens on port 8000 within the Docker network. To change the port it listens on, use:
+
+
+```yaml
+[web]
+port = 8000
+```
+
+You can map an external port to this container using the `timeseer_reverse_proxy_ports` variable:
 
 ```yaml
 timeseer_reverse_proxy_ports: "8080:8000"
 ```
 
-This configuration will redirect all requests made to your specified URL, as demonstrated in the following snippet:
+If you need the reverse proxy to redirect requests made to your URL to Timeseer, use:
 
 ```yaml
 [web]
-url = "<my address>"
+url = "<your URL>"
 ```
 
-These settings ensure that all inbound traffic directed to the specified address is rerouted to the Timeseer container's reverse proxy.
 
-You can utilize any TOML file for the reverse proxy configuration by setting the `proxy-config` variable. Once set, the reverse proxy can reference any TOML file located within the specified directory.
+
+Define the host as `0.0.0.0` if you want the reverse proxy to listen on all interfaces for a minimal configuration, or `127.0.0.1` for local access only:
+
+```yaml
+[web]
+host = "0.0.0.0"
+```
+
+
+Here is an example of a full YAML configuration with the default directories and exposing port 8080 on the host to 8000 on the reverse proxy container:
+
+```yaml
+- name: Setup Timeseer environment
+  hosts: test
+  become: true
+  vars:
+    timeseer_config_dir: "/opt/timeseer/config"
+    timeseer_image: container.timeseer.ai/timeseer
+    timeseer_reverse_proxy_image: container.timeseer.ai/timeseer
+    timeseer_reverse_proxy_config_dir::  "/opt/timeseer/proxy_config"
+    timeseer_reverse_proxy_ports: "8080:8000"
+  tasks:
+    - name: Import Timeseer docker role for Timeseer
+      ansible.builtin.import_role:
+        name: "timeseer.docker.timeseer"
+
+    - name: Install timeseer reverse proxy
+      ansible.builtin.import_role:
+        name: "timeseer.docker.timeseer_reverse_proxy"
+
+```
+and here a minimal  TOML file to go with this Yaml as an example
+
+```toml
+[timeseer]
+url = "http://timeseer:8080"
+[web]
+host = "0.0.0.0"
+```
+
+
+
 
 The reverse proxy efficiently handles SSL termination and supports user authentication through Azure AD, Google, or a SAML Identity Provider.
 
-Below is an example of a TOML file configured for authentication and certificates:
-
-```toml
-[AzureAD]
-application_id = "" # Application (client) ID of the registered application
-secret = "" # Client secret
-secret_env = "" # Environment variable containing the client secret
-tenant = "" # The Tenant ID of the application
-key = "" # Path to file containing PEM-encoded key
-certificate = "" # Path to file containing PEM-encoded certificate(s)
-```
+For more information in how to setup SSL and authentication, please refer to our documentation.
 
 
 
----
 
-We also offer `traefik` as an external reverse proxy; one of the biggest benefits of using Traefik is that it utilizes the ACME protocol, which allows us to generate HTTPS certificates.
+
+### Timeseer traefik role Configuration Guide
+
+We also offer `traefik` as an external reverse proxy; among the  benefits of using Traefik is that he automatically handles SSL termination and supports Let's Encrypt integration for automatic certificate generation and renewal using the ACME protocol, it also supports various authentication methods, including basic auth,  OAuth, and integration with external authentication providers, it also comes with  High Availability: Traefik can be deployed in a highly available configuration with its load balancer , ensuring continuous operation even in the face of failures.
+
+
 To use Traefik in your deployment, you will need to specify a host via the variable `traefik_host`. This variable expects a host address, which will be used to validate your generated certificate.
 
-Additionally, you also need to specify `traefik_letsencrypt_mail: ""`, which is used to validate you as the owner and user of the certificate.
+Additionally, you also need to specify `traefik_letsencrypt_mail: "`, which is used to validate you as the owner and user of the certificate.
 
 If you prefer to use your own certificate with Traefik, you can set `traefik_tls` to "certs" and provide the names of the certificate and key files via `traefik_cert_file_name` and `traefik_key_file_name`, respectively.
 
-Store these certificates in a directory of your choosing or use `traefik_certs_config_dir: "/opt/timeseer/traefik/certs"`.
+Store these certificates in a directory of your choosing and  use `traefik_certs_config_dir:` to refer to this directory
 
 Import the role using the following YAML:
 ```yaml
@@ -122,28 +200,20 @@ Import the role using the following YAML:
 The `timeseer data service` is an optional component designed to enhance performance for data services in fleet scenarios. It operates as a distinct service and comes with its own configuration file.
 The default configuration file is `Timeseer-data-service.toml`. An alternative config file location can be set using the `timeseer_data_service_toml_dir`
 
-**Cache**  
-By default, 2 GB of memory are allocated for caching data service contents.
-
-```toml
-cache_bytes = 2147483648 # 2 GB
-```
-
-Set `cache_bytes = 0` to disable caching.
-
-
 
 To utilize this service, set the following in your Timeseer configuration TOML file:
 
 ```toml
-[remote]
+[data-service]
 url = "http://timeseer-data-service:3000"
 ```
 
-By default, it uses port `3000:3000`, but you can change this to, for example, `3003:3000` using the variable:
+By default, it uses port `3000:3000`, but you can change this to modify use docker CLI syntax, such as
+     - "3003:3000" (maps host port 3003 to container port 3000)
 
 ```yaml
-timeseer_data_service_ports: "3003:3000"
+timeseer_data_service_ports:
+  - "3003:3000"
 ```
 
 Additionally, you need to upgrade the data service version to `3` by navigating to `Resources > Manage Resources > Export Resources` on the Timeseer application page. Export the data service you wish to use with the remote data service and update its version to `version: 3`. The default version is `1`.
