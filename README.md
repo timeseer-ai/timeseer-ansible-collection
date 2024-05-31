@@ -109,7 +109,7 @@ Modify the ports using Docker CLI syntax. For instance:
   hosts: <your host>
   become: true
   vars:
-    timeseer_config_dir: "/opt/timeseer/config"
+    timeseer_config_dir: "/opt/config"
     timeseer_ports: 8080:8080
 
   tasks:
@@ -226,10 +226,9 @@ Here is an example of a full YAML configuration with the default directories and
   hosts: <your host>
   become: true
   vars:
-    timeseer_config_dir: "/opt/timeseer/config"
-    timeseer_reverse_proxy_config_dir: "/opt/timeseer/proxy-config"
+    timeseer_config_dir: "/opt/config"
+    timeseer_reverse_proxy_config_dir: "/opt/proxy-config"
     timeseer_reverse_proxy_ports: "8080:8000"
-    timeseer_image: container.timeseer.ai/timeseer
     timeseer_reverse_proxy_enable: true
 
   tasks:
@@ -344,12 +343,11 @@ And here is full example yaml with all 3 timeseer roles
   hosts: test
   become: true
   vars:
-    timeseer_config_dir: "/opt/timeseer/config"
-    timeseer_reverse_proxy_config_dir: "/opt/timeseer/proxy-config"
-    timeseer_data_service_config_dir: "/opt/timeseer/Timeseer-data-service.toml"
+    timeseer_config_dir: "/opt/config"
+    timeseer_reverse_proxy_config_dir: "/opt/proxy-config"
+    timeseer_data_service_config_dir: "/opt/Timeseer-data-service.toml"
     timeseer_reverse_proxy_ports: "8080:8000"
     timeseer_reverse_proxy_enable: true
-    timeseer_data_service_image: "container.timeseer.ai/timeseer"
 
   tasks:
     - name: Import Timeseer Docker role
