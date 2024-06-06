@@ -260,11 +260,6 @@ host = "0.0.0.0"
       ansible.builtin.command: docker restart timeseer-reverse-proxy
 ```
 
-This setup provides a detailed guide on how to deploy Timeseer using Docker and Ansible, ensuring the environment is correctly configured and functional for immediate use.
-
-
-
-
 ### Timeseer traefik role Configuration Guide
 
 An optional role configures a [Traefik](https://github.com/traefik/traefik) reverse proxy.
