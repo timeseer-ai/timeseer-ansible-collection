@@ -197,7 +197,7 @@ port = 8000
 ```
 
 ### Port Configuration
-By default, the reverse proxy listens on port 8000 ` within the Docker network. To map an external port to this container, modify the `timeseer_reverse_proxy_ports` variable using Docker CLI syntax:
+By default, the reverse proxy listens on port 8000  within the Docker network. To map an external port to this container, modify the `timeseer_reverse_proxy_ports` variable using Docker CLI syntax:
 
 ```yaml
 timeseer_reverse_proxy_ports: "8080:8000" # Maps host port 8080 to container port 8000
@@ -291,6 +291,8 @@ Import the role using the following YAML:
 **Timeseer Data Service Role Configuration Guide**
 
 The Timeseer data service is an optional component specifically designed to enhance performance for data services in fleet scenarios. This service operates independently and has its own dedicated configuration file.
+
+
 
 **Default Configuration:**
 - **Configuration File:** `Timeseer-data-service.toml`
