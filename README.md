@@ -15,33 +15,32 @@ For more detailed information, visit the [Timeseer.AI website](https://www.times
 
 ## Role Implementation Examples
 
-The Timeseer Ansible collection includes four roles.
+## Timeseer Ansible Collection: timeseer Role Overview
 
-The `timeseer` role is primarily designed for deploying just the Docker container and is ideal for a limited proof of concept (POC) involving 1-2 users.
+The `timeseer` role is primarily intended for deploying the Timeseer Docker container. It is ideally suited for a limited Proof of Concept (POC) involving 1-2 users. This setup does not require authentication or a web server and can be run locally.
 
-This setup does not require authentication or a web server and can be run locally.
+### Installation Directory
 
-However, for an optimal experience, it is recommended to use a sufficiently powerful machine.
+By default, the `timeseer` role creates the following directories on your local machine:
+- **Main directory:** `/opt/timeseer`
+- **Database directory:** `/opt/timeseer/db`
+- **Data directory:** `/opt/timeseer/data`
 
-By default, this role creates a directory at `/opt/timeseer`.
+To customize the installation directory, modify the `timeseer_dir` variable in your Ansible playbook.
 
-Within this directory, it also creates `db` and `data` subdirectories for your database and data on your local machine.
+### Configuration
 
-The default variable definitions can be modified to fit your system requirements.
+Timeseer uses TOML files for configuration. The Docker container comes with a default configuration file, but additional configuration files are often necessary for adding sources.
 
-Use the variable `timeseer_dir` to change the default directory.
+- **Configuration directory:** Use the `timeseer_config_dir` variable to specify a directory for your TOML files. 
+  
+- **Copying Configuration Files:** Utilize the `ansible.builtin.copy` module to copy TOML files from the local machine (where the playbook is run) to the target machine where the Timeseer tasks are being executed.
 
-Timeseer uses TOML files for configuration, and the container includes a default configuration file.
+### Example Configuration
 
-However, you will likely need to add your own configuration files.
+#### Ansible Playbook Example
 
-You can use the `timeseer_config_dir` variable to define a directory where you can add TOML files, which will be included in the configuration.
-
-Create a `config` directory relative to your Ansible playbook directory.
-
-Use the `ansible.builtin.copy` module to copy files from the local machine (where the playbook is run) to the target machine where the Ansible tasks are being executed.
-
-Example:
+This YAML snippet demonstrates how to configure and restart Timeseer using `ansible.builtin.copy` module.
 
 ```yaml
 - name: Configure Timeseer
@@ -54,18 +53,16 @@ Example:
     - Restart Timeseer
 ```
 
-Add the following `handler` to your playbook to handle file changes with a restart:
+#### Handler for Restarting Timeseer
 
 ```yaml
 - name: Restart Timeseer
   ansible.builtin.command: docker restart timeseer
 ```
 
-Here is an example source file.
+#### TOML Configuration Example
 
-You can define a source using TOML.
-
-For more information on how to set up sources, please refer to our documentation.
+Here's an example of a TOML configuration source file for Timeseer:
 
 ```toml
 [source.example-row]
@@ -81,7 +78,9 @@ field_columns = ["product", "value"]
 "value" = "value"
 ```
 
-And here is the example-row.csv:
+#### CSV Source Data
+
+Example data source in CSV format:
 
 ```csv
 location,plant,ts,product,value
@@ -92,17 +91,28 @@ Antwerp,P1,2020-01-03T00:00:00Z,B,1
 Antwerp,P2,2020-01-03T00:00:00Z,A,2
 ```
 
-To run a simple Docker container Proof of Concept (PoC) using this role, you will need to expose the VM ports. 
+### Port Configuration
 
-You can use the `timeseer_ports` variable for this purpose. 
+To configure port mapping in your Ansible playbook, use the `timeseer_ports` variable. This variable should specify the port mapping in the format `"host_port:container_port"`. Here's what each component means:
 
-Set the `timeseer_ports` variable to an unused local port, and you will be able to access Timeseer at `localhost:<port>`.
+- **host_port:** This is the port on your local machine (host) where you will access Timeseer.
+- **container_port:** This is the port inside the Docker container where Timeseer is set to receive connections.
 
-Here is an example of a full YAML configuration with the default directories. 
+#### Example Configuration
 
-Modify the ports using Docker CLI syntax. For instance:
+For example, if you want to access Timeseer at `localhost:8080`, and Timeseer inside the Docker container is configured to listen on port 8080, you would set the `timeseer_ports` variable as follows:
 
-"8080:8080" maps host port 8080 to container port 8080:
+```yaml
+timeseer_ports: "8080:8080"
+```
+
+This configuration maps port 8080 of the host to port 8080 of the Docker container, enabling access to the Timeseer interface by navigating to `http://localhost:8080`.
+
+
+
+### Full Example of YAML Configuration
+
+This YAML example sets up the Timeseer environment and maps necessary ports:
 
 ```yaml
 - name: Setup Timeseer environment
@@ -126,45 +136,38 @@ Modify the ports using Docker CLI syntax. For instance:
       notify:
         - Restart Timeseer
 
-    - name: Import Timeseer Docker role
-      ansible.builtin.import_role:
-        name: "timeseer.docker.timeseer"
-
   handlers:
     - name: Restart Timeseer
       ansible.builtin.command: docker restart timeseer
-
 ```
 
-### Timeseer Reverse Proxy role Configuration Guide
+### Additional Tips
 
-When a more robust setup is desired, deploying the `timeseer_reverse_proxy` is recommended.
+- **Documentation:** Ensure you review the official Timeseer and Ansible documentation for detailed guidelines on customization and deployment
 
-By default, Timeseer includes a reverse proxy facilitated through another Timeseer container.
+---
 
-The `timeseer_reverse_proxy` role creates a default directory on your system located at `/opt/timeseer/reverse-proxy`.
+## Timeseer Reverse Proxy Role Configuration Guide
 
-To change the directory to one of your preference use the `timeseer_reverse_proxy_dir` variable.
+### Overview
+When a more robust setup is desired, deploying the `timeseer_reverse_proxy` role is recommended. By default, Timeseer includes a reverse proxy that is facilitated through another Timeseer container.
 
-He will also create a directory to store a secret file. 
+### Directory Configuration
+- **Default Directory**: The `timeseer_reverse_proxy` role creates a default directory at `/opt/timeseer/reverse-proxy`.
+- **Customization**: To change the directory to one of your preference, modify the `timeseer_reverse_proxy_dir` variable in your Ansible playbook.
+- **env file**: The role also creates a directory to store a env file at `timeseer_reverse_proxy_dir/env`. Using this file is optional but recommended.
+  
+This file is utilized for authentication with Azure AD, Google, or a SAML Identity Provider. For detailed setup instructions, please refer to our documentation.
 
-Relative to `timeseer_reverse_proxy_dir/env`, it is optional to use this file but is recommended.
+### TOML Configuration
+- **Configuration Directory**: Use the `timeseer_reverse_proxy_config_dir` variable to specify a drop-in directory for adding TOML files, which will be included in the configuration.
+- **Copying Configuration Files:** Utilize the `ansible.builtin.copy` module to copy TOML files from the local machine (where the playbook is run) to the target machine where the Timeseer tasks are being executed.
 
-This file is used for authentication with Azure AD, Google, or a SAML Identity Provider.
-
-For more information on how to set up authentication, please read our documentation.
-
-
-To configure the reverse proxy to work with your environment, you will also need to configure a TOML file.
-
-The `timeseer_reverse_proxy_config_dir:` variable can be used as a drop-in directory where you can add TOML files that will be included in the configuration.
-
-Create a `proxy-config` directory relative to your Ansible playbook directory.
-
-Similar to `timeseer-role`, you can also create that configuration file with a task using `ansible.builtin.copy`:
+### Ansible Playbook Example
+Here's how to add configuration files  to Timeseer reverse proxy with  `ansible.builtin.copy`  module :
 
 ```yaml
-- name: Configure Timeseer
+- name: Configure Timeseer Reverse Proxy
   ansible.builtin.copy:
     src: "{{ item }}"
     dest: "{{ timeseer_reverse_proxy_config_dir }}/{{ item | basename }}"
@@ -174,53 +177,44 @@ Similar to `timeseer-role`, you can also create that configuration file with a t
     - Restart Timeseer Reverse Proxy
 ```
 
-Add the following `handler` to your playbook to manage file changes with a restart:
+### Handler for Restart
+Add the following handler to your playbook to manage file changes with a restart:
 
 ```yaml
-- name: Restart Timeseer
+- name: Restart Timeseer Reverse Proxy
   ansible.builtin.command: docker restart timeseer-reverse-proxy
 ```
 
-**Example Configuration:**
-
-In the example bellow, the URL specifies the DNS name of your Timeseer instance within the Docker network.
+### Example TOML Configuration
+Below is an example configuration specifying the DNS name of your Timeseer instance within the Docker network:
 
 ```toml
 [timeseer]
 url = "http://timeseer:8080"
-```
 
-By default, the reverse proxy listens on port 8000 within the Docker network. To change the port it listens on, use:
-
-```yaml
 [web]
 port = 8000
 ```
 
-
-You can map an external port to this container using the `timeseer_reverse_proxy_ports` variable. Modify it using Docker CLI syntax, such as:
-- "8080:8000" (maps host port 8080 to container port 8000)
+### Port Configuration
+By default, the reverse proxy listens on port 8000 ` within the Docker network. To map an external port to this container, modify the `timeseer_reverse_proxy_ports` variable using Docker CLI syntax:
 
 ```yaml
-timeseer_reverse_proxy_ports: "8080:8000"
+timeseer_reverse_proxy_ports: "8080:8000" # Maps host port 8080 to container port 8000
 ```
+### Full YAML Configuration Example
 
-If you need the reverse proxy to redirect requests made to your URL to Timeseer, use:
+Below is a  example of a YAML configuration setup for Timeseer, including default directories and port forwarding. This configuration maps port 8080 on the host to port 8000 on the reverse proxy container:
 
-```yaml
-[web]
-url = "<your URL>"
-```
-
-Define the host as `0.0.0.0` if you want the reverse proxy to listen on all interfaces for a minimal configuration, or `127.0.0.1` for local access only:
-
-```yaml
+**Minimal TOML Configuration**
+```toml
+[timeseer]
+url = "http://timeseer:8080"
 [web]
 host = "0.0.0.0"
 ```
 
-Here is an example of a full YAML configuration with the default directories and exposing port 8080 on the host to 8000 on the reverse proxy container:
-
+**Complete Ansible YAML Configuration:**
 ```yaml
 - name: Setup Timeseer environment
   hosts: <your host>
@@ -266,14 +260,8 @@ Here is an example of a full YAML configuration with the default directories and
       ansible.builtin.command: docker restart timeseer-reverse-proxy
 ```
 
-and here a minimal TOML file to go with this Yaml as an example
+This setup provides a detailed guide on how to deploy Timeseer using Docker and Ansible, ensuring the environment is correctly configured and functional for immediate use.
 
-```toml
-[timeseer]
-url = "http://timeseer:8080"
-[web]
-host = "0.0.0.0"
-```
 
 
 
@@ -300,44 +288,42 @@ Import the role using the following YAML:
 ```
 ### Timeseer data service role Configuration Guide
 
-The `timeseer data service` is an optional component designed to enhance performance for data services in fleet scenarios.
+**Timeseer Data Service Role Configuration Guide**
 
-It operates as a distinct service and comes with its own configuration file.
+The Timeseer data service is an optional component specifically designed to enhance performance for data services in fleet scenarios. This service operates independently and has its own dedicated configuration file.
 
-The default configuration file is `Timeseer-data-service.toml`.
+**Default Configuration:**
+- **Configuration File:** `Timeseer-data-service.toml`
+- You can specify an alternative configuration file location using the `timeseer_data_service_config_dir` variable.
 
-An alternative config file location can be set using the `timeseer_data_service_config_dir`.
-
-To utilize this service, set the following in your Timeseer configuration TOML file:
-
+**Service Setup:**
+- To use this service, add the following settings to your Timeseer `timeseer_config_dir` as a  TOML file:
 ```toml
 [data-service]
 url = "http://timeseer-data-service:3000"
 ```
+- This service is configured by default to use port `3000:3000`. To change this setting, you can modify the port mappings using Docker CLI syntax, for example, `"3003:3000"` which maps host port 3003 to container port 3000.
 
-By default, it uses port `3000:3000`,  to modify use docker CLI syntax, such as - "3003:3000" (maps host port 3003 to container port 3000)
-
+**Port Configuration:**
 ```yaml
 timeseer_data_service_ports:
   - "3003:3000"
 ```
 
-Additionally, you need to upgrade the data service version to `3` by navigating to `Resources > Manage Resources > Export Resources` on the Timeseer application page.
+**Upgrading Data Service:**
+- To upgrade the data service to version 3, navigate to **Resources > Manage Resources > Export Resources** on the Timeseer application page.
+- Export the data service you wish to use with the remote data service and update its version to `version: 3`.
+- Note: The default version is 1.
 
-Export the data service you wish to use with the remote data service and update its version to `version: 3`.
-
-The default version is `1`.
-
-Import the role using the following YAML:
-
+**Importing the Role:**
+- To install the Timeseer data service, use the following YAML configuration:
 ```yaml
 - name: install timeseer data-service
   ansible.builtin.import_role:
     name: "timeseer.docker.timeseer_data_service"
 ```
-And here is full example yaml with all 3 timeseer roles
 
-
+**Full Example YAML with All Timeseer Roles:**
 ```yaml
 - name: Setup Timeseer environment
   hosts: test
@@ -386,7 +372,6 @@ And here is full example yaml with all 3 timeseer roles
 
     - name: Restart Timeseer Reverse Proxy
       ansible.builtin.command: docker restart timeseer-reverse-proxy
-
 ```
 
 ---
