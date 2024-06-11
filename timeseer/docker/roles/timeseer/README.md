@@ -13,6 +13,139 @@ This Ansible role is designed for setting up timeseer, a time-series data analys
 - Docker installed on the target machine.
 - `community.docker` Ansible collection.
 
+
+## Role Overview
+
+The `timeseer` role is primarily intended for deploying the Timeseer Docker container. It is ideally suited for a limited Proof of Concept (POC) involving 1-2 users. This setup does not require authentication or a web server and can be run locally.
+
+### Installation Directory
+
+By default, the `timeseer` role creates the following directories on your local machine:
+- **Main directory:** `/opt/timeseer`
+- **Database directory:** `/opt/timeseer/db`
+- **Data directory:** `/opt/timeseer/data`
+
+To customize the installation directory, modify the `timeseer_dir` variable in your Ansible playbook.
+
+### Configuration
+
+Timeseer uses TOML files for configuration. The Docker container comes with a default configuration file, but additional configuration files are often necessary for adding sources.
+
+- **Configuration directory:** Use the `timeseer_config_dir` variable to specify a directory for your TOML files. 
+  
+- **Copying Configuration Files:** Utilize the `ansible.builtin.copy` module to copy TOML files from the local machine (where the playbook is run) to the target machine where the Timeseer tasks are being executed.
+
+### Example Configuration
+
+#### Ansible Playbook Example
+
+This YAML snippet demonstrates how to configure and restart Timeseer using `ansible.builtin.copy` module.
+
+```yaml
+- name: Configure Timeseer
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ timeseer_config_dir }}/{{ item | basename }}"
+    mode: "0644"
+  with_fileglob: "config/*.toml"
+  notify:
+    - Restart Timeseer
+```
+
+#### Handler for Restarting Timeseer
+
+```yaml
+- name: Restart Timeseer
+  ansible.builtin.command: docker restart timeseer
+```
+
+#### TOML Configuration Example
+
+Here's an example of a TOML configuration source file for Timeseer:
+
+```toml
+[source.example-row]
+type = "csv"
+format = "row"
+path = "/usr/src/app/data/example-row.csv"
+header_row = true
+tag_columns = ["location", "plant"]
+field_columns = ["product", "value"]
+
+[source.example-row.column_mapping]
+"ts" = "ts"
+"value" = "value"
+```
+
+#### CSV Source Data
+Data is stored in the Data directory at  `/opt/timeseer/data`. 
+
+Below is example data source in CSV format:
+
+
+```cs
+location,plant,ts,product,value
+Antwerp,P1,2020-01-01T00:00:00Z,A,1
+Antwerp,P2,2020-01-01T00:00:00Z,A,1
+Antwerp,P1,2020-01-02T00:00:00Z,A,2
+Antwerp,P1,2020-01-03T00:00:00Z,B,1
+Antwerp,P2,2020-01-03T00:00:00Z,A,2
+```
+
+### Port Configuration
+
+To configure port mapping in your Ansible playbook, use the `timeseer_ports` variable. This variable should specify the port mapping in the format `"host_port:container_port"`. Here's what each component means:
+
+- **host_port:** This is the port on your local machine (host) where you will access Timeseer.
+- **container_port:** This is the port inside the Docker container where Timeseer is set to receive connections.
+
+#### Example Configuration
+
+For example, if you want to access Timeseer at `localhost:8080`, and Timeseer inside the Docker container is configured to listen on port 8080, you would set the `timeseer_ports` variable as follows:
+
+```yaml
+timeseer_ports: "8080:8080"
+```
+
+This configuration maps port 8080 of the host to port 8080 of the Docker container, enabling access to the Timeseer interface by navigating to `http://localhost:8080`.
+
+
+
+### Full Example of YAML Configuration
+
+This YAML example sets up the Timeseer environment and maps necessary ports:
+
+```yaml
+- name: Setup Timeseer environment
+  hosts: <your host>
+  become: true
+  vars:
+    timeseer_config_dir: "/opt/config"
+    timeseer_ports: 8080:8080
+
+  tasks:
+    - name: Import Timeseer Docker role
+      ansible.builtin.import_role:
+        name: "timeseer.docker.timeseer"
+
+    - name: Configure Timeseer
+      ansible.builtin.copy:
+        src: "{{ item }}"
+        dest: "{{ timeseer_config_dir }}/{{ item | basename }}"
+        mode: "0644"
+      with_fileglob: "config/*.toml"
+      notify:
+        - Restart Timeseer
+
+  handlers:
+    - name: Restart Timeseer
+      ansible.builtin.command: docker restart timeseer
+```
+
+### Additional Tips
+
+- **Documentation:** Ensure you review the official Timeseer and Ansible documentation for detailed guidelines on customization and deployment
+
 ## Role Variables
 
 Variables used in this role are listed below, along with default values (see `defaults/main.yml`):
@@ -28,16 +161,6 @@ Variables used in this role are listed below, along with default values (see `de
 ## Dependencies
 
 No other Galaxy roles are dependencies for this role. However, it's important to ensure that Docker is properly installed and configured on your hosts.
-
-## Example Playbook
-
-Include this role in your playbooks as follows:
-
-```yaml
-- hosts: 
-  roles:
-     - timeseer.docker.timeseer
-```
 
 ## License
 
