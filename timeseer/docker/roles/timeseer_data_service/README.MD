@@ -15,6 +15,10 @@ This Ansible role is designed to deploy and configure the Timeseer Data Service 
 
 The Timeseer data service is an optional component specifically designed to enhance performance for data services in fleet scenarios. This service operates independently and has its own dedicated configuration file.
 
+**Directory Configuration**
+Default Directory: The timeseer_data_service role creates a default directory at `/opt/timeseer/data-service`.
+
+Customization: To change the directory to one of your preference, modify the `timeseer_data_service_dir` variable in your Ansible playbook.
 
 **Default Configuration:**
 - **Configuration File:** `Timeseer-data-service.toml`
