@@ -50,19 +50,17 @@ timeseer_data_service_ports:
 
 Variables used in this role are listed below, along with default values (see `defaults/main.yml`):
 
-- `timeseer_data_service_dir` (default: "/opt/timeseer/data-service"): The directory for the Timeseer Data Service.
-- `timeseer_data_service_docker_volume` (default: ''): Optional Docker volume for Timeseer data service storage.
-- `timeseer_data_service_toml_dir` (default: ""): Optional directory for TOML configuration files.
-- `timeseer_data_service_enable` (default: false): Boolean to enable or disable the data service.
-- `timeseer_data_service_image` (default: "container.timeseer.ai/timeseer"): docker image used for the Timeseer Data Service.
-- `timeseer_data_service_ports` (default: []): Port mappings for the service. Modify using Docker CLI syntax, such as
+- `timeseer_data_service_dir` (default: `"/opt/timeseer/data-service"`): The directory for the Timeseer Data Service.
+- `timeseer_data_service_docker_volume` (default:` ''`): Optional Docker volume for Timeseer data service storage.
+- `timeseer_data_service_toml_dir` (default:` ""`): Optional directory for TOML configuration files.
+- `timeseer_data_service_enable` (default: `false`): Boolean to enable or disable the data service.
+- `timeseer_data_service_image` (default: `"container.timeseer.ai/timeseer"`): docker image used for the Timeseer Data Service.
+- `timeseer_data_service_ports` (default: `[]`): Port mappings for the service. Modify using Docker CLI syntax, such as
      - "3003:3000" (maps host port 3003 to container port 3000)
      - "0.0.0.0:3003:3000" (binds host port 3003 on all interfaces to container port 3000)
-- `timeseer_data_service_network` (default: "timeseer"): docker network to which the service connects.
-- `timeseer_data_service_journal_tag` (default: "TIMESEER-DS"): Tag used for logging purposes.
-- `timeseer_data_service_image_pull` (default: true): Whether to pull the latest docker image.
-
-
+- `timeseer_data_service_network` (default: `"timeseer"`): docker network to which the service connects.
+- `timeseer_data_service_journal_tag` (default: `"TIMESEER-DS"`): Tag used for logging purposes.
+- `timeseer_data_service_image_pull` (default: `true`): Whether to pull the latest docker image.
 
 ## Dependencies
 
