@@ -1,0 +1,40 @@
+- name: Prepare a storage directory for ts-data-service
+  file:
+    path: "{{ timeseer_data_service_dir }}"
+    state: directory
+    owner: 1001
+    mode: "0755"
+
+- name: Set storage path to Docker volume
+  ansible.builtin.set_fact:
+    timeseer_data_service_storage_mount: "{{ timeseer_data_service_docker_volume }}"
+  when: timeseer_data_service_docker_volume | default('') | trim != ''
+
+- name: Set storage path to timeseer default storage_path
+  ansible.builtin.set_fact:
+    timeseer_data_service_storage_mount: "{{ timeseer_data_service_dir }}"
+  when: timeseer_data_service_docker_volume | default('') | trim == ''
+
+- name: Run ts-data-service as a container
+  community.docker.docker_container:
+    name: timeseer-data-service
+    image: "{{ timeseer_data_service_image }}"
+    command: "/usr/bin/timeseer-data-service"
+    state: started
+    restart_policy: unless-stopped
+    networks:
+      - name: "{{ timeseer_data_service_network }}"
+    volumes: "{{ volume_list }}"
+    log_driver: journald
+    log_options:
+      tag: "{{ timeseer_data_service_journal_tag }}"
+    env:
+      RUST_LOG: info
+    tty: true
+    ports: "{{ timeseer_data_service_ports }}"
+  vars:
+    base_volumes:
+      - "{{ timeseer_data_service_storage_mount }}:/usr/src/app/data-service"
+    custom_toml_volume:
+      - "{{ timeseer_data_service_config_dir }}:/usr/src/app/Timeseer-data-service.toml"
+    volume_list: "{{ base_volumes + (custom_toml_volume if timeseer_data_service_config_dir | default('') | trim != '' else []) }}"

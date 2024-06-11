@@ -13,7 +13,6 @@ This Ansible role is designed for deploying and configuring Traefik, a modern HT
 - `community.docker` Ansible collection.
 
 ## Role Overview
-
 Traefik supports generating SSL certificates using [Let's Encrypt](https://letsencrypt.org/).
 
 The role allows configuring Basic Authentication through Traefik,

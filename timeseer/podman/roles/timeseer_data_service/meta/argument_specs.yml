@@ -1,0 +1,63 @@
+argument_specs:
+  timeseer_data_service_setup:
+    short_description: Configure and run the Timeseer data service
+    description:
+      - Sets up the necessary environment and runs the Timeseer data service in a podman container.
+      - Manages the data service directory and the podman container deployment.
+
+    options:
+      timeseer_data_service_dir:
+        description:
+          - Directory for storing the Timeseer data service data.
+        type: str
+        default: "/opt/timeseer/data-service"
+
+      timeseer_data_service_podman_volume:
+        description:
+          - Optional podman volume for timeseer_data_service  storage.
+          - If defined, it is used as the primary storage path.
+        type: str
+        default: ""
+
+      timeseer_data_service_toml_dir:
+        description:
+          - Optional directory for a TOML configuration file for the Timeseer data service.
+          - If not defined, no custom TOML configuration is used.
+        type: str
+        default: ""
+
+      timeseer_data_service_enable:
+        description:
+          - Whether to enable the Timeseer data service.
+        type: bool
+        default: false
+
+      timeseer_data_service_image:
+        description:
+          - The podman image to use for the Timeseer data service.
+        type: str
+        default: "container.timeseer.ai/timeseer"
+
+      timeseer_data_service_ports:
+        description:
+          - Specifies the ports that the Timeseer data service container will listen on.
+        type: list
+        default: []
+
+      timeseer_data_service_network:
+        description:
+          - Name of the podman network to which the Timeseer data service container should be attached.
+        type: str
+        default: "timeseer"
+
+      timeseer_data_service_journal_tag:
+        description:
+          - Tag used for logging in the Timeseer data service container.
+        type: str
+        default: "TIMESEER-DS"
+
+      timeseer_data_service_image_pull:
+        description:
+          - Whether to pull the Timeseer image from the podman registry before starting the container.
+        type: bool
+        default: true

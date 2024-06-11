@@ -33,7 +33,7 @@ Including an example of how to use your role:
 
 ```yaml
 - hosts: timeseer-server
-  roles:
+  import_role:
     - timeseer.podman.timeseer_reverse_proxy
 ```
 

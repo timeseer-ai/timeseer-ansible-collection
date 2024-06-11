@@ -1,6 +1,6 @@
 ---
 timeseer_reverse_proxy_dir: /opt/timeseer/reverse-proxy
-timeseer_reverse_proxy_image: docker.timeseer.ai/timeseer
+timeseer_reverse_proxy_image: container.timeseer.ai/timeseer
 timeseer_reverse_proxy_network: timeseer
 timeseer_reverse_proxy_ports: ""
 timeseer_reverse_proxy_journal_tag: "TIMESEER-RP"
