@@ -14,8 +14,6 @@ This Ansible role is designed for deploying and configuring Traefik, a modern HT
 
 ## Role Overview
 
-An optional role configures a [Traefik](https://github.com/traefik/traefik) reverse proxy.
-
 Traefik supports generating SSL certificates using [Let's Encrypt](https://letsencrypt.org/).
 
 The role allows configuring Basic Authentication through Traefik,
