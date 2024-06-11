@@ -125,16 +125,18 @@ host = "0.0.0.0"
       ansible.builtin.command: docker restart timeseer-reverse-proxy
 ```
 
+
 ## Role Variables
 
-Variables used in this role are listed below, along with default values (see `defaults/main.yml`):
+Here are the variables used in this role, complete with their default values found in defaults/main.yml:
 
-- `timeseer_reverse_proxy_dir`: Directory for the reverse proxy configuration.
-- `timeseer_reverse_proxy_image`: Docker image for the Timeseer reverse proxy.
-- `timeseer_reverse_proxy_config_dir` (default: ''): Optional directory for custom reverse proxy configurations.
-- `timeseer_reverse_proxy_journal_tag`: Tag for journal logging.
-- `timeseer_reverse_proxy_ports` (default: ''): Custom port mapping for the Timeseer reverse proxy container. This should be specified in the Docker port mapping format (e.g., '8080:8080')
-  
+- `timeseer_reverse_proxy_dir`: Directory for the reverse proxy configuration. (default: `"/opt/timeseer/reverse_proxy"`)
+- `timeseer_reverse_proxy_image`: Docker image for the Timeseer reverse proxy. (default: `"docker.timeseer.ai/reverse_proxy"`)
+- `timeseer_reverse_proxy_config_dir`: Optional directory for custom reverse proxy configurations. (default: `""`)
+- `timeseer_reverse_proxy_journal_tag`: Tag for journal logging. (default: `"TIMESEER_PROXY"`)
+- `timeseer_reverse_proxy_ports`: Custom port mapping for the Timeseer reverse proxy container. This should be specified in the Docker port mapping format (e.g., `"8080:8080"`). (default: `""`)
+---
+
 ## Dependencies
 
 No additional roles are required. Ensure Docker is properly installed and configured on the target hosts.
