@@ -1,6 +1,6 @@
 # timeseer-ansible-collection
 
-[![Ansible Galaxy](https://img.shields.io/badge/ansible--galaxy-timeseer_ansible_collection-yellow.svg)](https://galaxy.ansible.com/diogolobo122/timeseer)
+[![Ansible Galaxy](https://img.shields.io/badge/ansible--galaxy-timeseer_ansible_collection-yellow.svg)](https://galaxy.ansible.com/ui/namespaces/timeseer/)
 
 timeseer offers a platform for enhancing the reliability and observability of time-series data. It addresses challenges like unreliable data, reducing data downtime, and ensuring trustworthiness in time-series analytics. The platform is designed to assist data teams in detecting, prioritizing, and investigating data quality issues proactively. It integrates seamlessly into modern data stacks, offering features like data reliability scoring, monitoring, optimization, and connectivity. Timeseer.AI is an essential tool for roles such as Data Officers, Engineers, Automation Engineers, and Data Scientists, providing a comprehensive solution for managing time-series data quality effectively.
 
@@ -11,31 +11,22 @@ For more detailed information, visit the [Timeseer.AI website](https://www.times
 - Ansible 2.9 or higher.
 - docker installed on the target machine.
 - `community.docker` Ansible collection.
+- `containers.podman collection` Ansible collection if you are using podman
+---
 
-## Example Playbook
 
-```yaml
-- hosts: your_target_hosts
-  tasks:
-    - name: Run Timeseer container
-      ansible.builtin.import_role:
-        name: timeseer.docker.timeseer
+## Roles
 
-    - name: Run Timeseer reverse proxy container
-      ansible.builtin.import_role:
-        name: timeseer.docker.timeseer_reverse_proxy
-      when: timeseer_reverse_proxy_enable is defined and timeseer_reverse_proxy_enable
+- **timeseer**: Sets up Timeseer in docker, handling storage preparation,docker volumes, and deployment.  
+  [![Ansible Galaxy](https://img.shields.io/badge/docker-timeseer-yellow.svg)](https://github.com/timeseer-ai/timeseer-ansible-collection/tree/master/timeseer/docker/roles/timeseer)
 
-    - name: Run Traefik reverse proxy
-      ansible.builtin.import_role:
-        name: timeseer.docker.traefik
-      vars:
-        traefik_letsencrypt_mail: "it-support@timeseer.ai"
-        traefik_basic_auth_users: "{{ tsai_traefik_users + customer_traefik_users }}"
-        traefik_expose_flight: true
-```
+- **timeseer_reverse_proxy**: Configures Timeseer and its reverse proxy in docker, including storage, docker containers, and proxy setup.  
+  [![Ansible Galaxy](https://img.shields.io/badge/docker-timeseer_reverse_proxy-yellow.svg)](https://github.com/timeseer-ai/timeseer-ansible-collection/tree/master/timeseer/docker/roles/timeseer_reverse_proxy)
 
-## Installation
+- **timeseer_traefik**: Deploys Traefik as a reverse proxy and load balancer in podman, focusing on SSL/TLS with Let's Encrypt.  
+  [![Ansible Galaxy](https://img.shields.io/badge/docker-timeseer_traefik-yellow.svg)](https://github.com/timeseer-ai/timeseer-ansible-collection/tree/master/timeseer/docker/roles/timeseer_traefik)
+
+---
 
 ### Installing timeseer.docker Collection with Ansible
 
