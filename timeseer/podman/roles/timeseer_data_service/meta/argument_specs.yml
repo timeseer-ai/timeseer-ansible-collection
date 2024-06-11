@@ -19,7 +19,7 @@ argument_specs:
         type: str
         default: ""
 
-      timeseer_data_service_toml_dir:
+      timeseer_data_service_config_dir:
         description:
           - Optional directory for a TOML configuration file for the Timeseer data service.
           - If not defined, no custom TOML configuration is used.
