@@ -24,7 +24,7 @@ For more detailed information, visit the [Timeseer.AI website](https://www.times
   [![Ansible Galaxy](https://img.shields.io/badge/docker-timeseer_reverse_proxy-yellow.svg)](https://github.com/timeseer-ai/timeseer-ansible-collection/tree/master/timeseer/docker/roles/timeseer_reverse_proxy)
 
 - **timeseer_traefik**: Deploys Traefik as a reverse proxy and load balancer in podman, focusing on SSL/TLS with Let's Encrypt.  
-  [![Ansible Galaxy](https://img.shields.io/badge/docker-timeseer_traefik-yellow.svg)](https://github.com/timeseer-ai/timeseer-ansible-collection/tree/master/timeseer/docker/roles/timeseer_traefik)
+  [![Ansible Galaxy](https://img.shields.io/badge/docker-timeseer_traefik-yellow.svg)](https://github.com/timeseer-ai/timeseer-ansible-collection/tree/master/timeseer/docker/roles/traefik)
 
 ---
 
