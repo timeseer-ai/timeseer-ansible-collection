@@ -148,15 +148,21 @@ This YAML example sets up the Timeseer environment and maps necessary ports:
 
 ## Role Variables
 
-Variables used in this role are listed below, along with default values (see `defaults/main.yml`):
+Here are the variables used in this role, complete with their default values found in `defaults/main.yml`:
 
-- `timeseer_dir`: Base directory for Timeseer data and configurations.
-- `timeseer_docker_volume` (default: ''): Optional Docker volume for Timeseer storage.
-- `timeseer_network`: Name of the Docker network for Timeseer.
-- `timeseer_image`: Docker image for Timeseer.
-- `timeseer_download_demo_data` (default: false): Whether to download demo data for Timeseer.
-- `timeseer_config_dir` (default: ''): Optional directory for custom Timeseer configurations.
-- `timeseer_ports:` (default: ''): Custom port mapping for the Timeseer container. This should be specified in the Docker port mapping format (e.g., '8080:8080') 
+- `timeseer_dir`: Base directory for Timeseer data and configurations. (default: `"/opt/timeseer"`)
+- `timeseer_db_dir`: Directory for Timeseer database files. (default: `"/opt/timeseer"`)
+- `timeseer_docker_volume`: Optional Docker volume for Timeseer storage. (default: `""`)
+- `timeseer_network`: Name of the Docker network for Timeseer. (default: `"timeseer"`)
+- `timeseer_image`: Docker image for Timeseer. (default: `"container.timeseer.ai/timeseer"`)
+- `timeseer_download_demo_data`: Whether to download demo data for Timeseer. (default: `false`)
+- `timeseer_config_dir`: Optional directory for custom Timeseer configurations. (default: `""`)
+- `timeseer_ports`: Custom port mapping for the Timeseer container. This should be specified in the Docker port mapping format (e.g., `"8080:8080"`). (default: `""`)
+- `timeseer_journal_tag`: Tag for journal logging. (default: `"TIMESEER"`)
+- `timeseer_image_pull`: Whether to pull the Timeseer Docker image. (default: `true`)
+
+
+---
 
 ## Dependencies
 
