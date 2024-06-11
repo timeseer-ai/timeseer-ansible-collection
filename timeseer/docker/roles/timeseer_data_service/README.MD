@@ -66,16 +66,6 @@ Variables used in this role are listed below, along with default values (see `de
 
 There are no external role dependencies for this role, but Docker must be installed and operational on the target hosts.
 
-## Example Playbook
-
-Here's an example of how to include this role in your playbook:
-
-```yaml
-- hosts: timeseer-servers
-  import_role:
-    - timeseer.docker.timeseer_data_service
-```
-
 ## License
 
 Refer to the `LICENSE.md` file in this repository for licensing information.
