@@ -2,7 +2,7 @@
 
 # Ansible Role: timeseer_data_service
 
-[![Ansible Galaxy](https://img.shields.io/badge/ansible--galaxy-timeseer_data_service-blue.svg)](https://galaxy.ansible.com/ui/namespaces/timeseer/)
+[![Ansible Galaxy](https://img.shields.io/badge/ansible--galaxy-timeseer_data_service-yellow.svg)](https://galaxy.ansible.com/ui/namespaces/timeseer/)
 
 This Ansible role is designed to deploy and configure the Timeseer Data Service in a Docker environment. It handles tasks such as setting up the necessary storage directories, configuring Docker volumes, managing Docker containers for the Timeseer Data Service, and optionally configuring the service via TOML files.
 
