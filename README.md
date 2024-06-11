@@ -27,7 +27,7 @@ For more detailed information, visit the [Timeseer.AI website](https://www.times
   [![Ansible Galaxy](https://img.shields.io/badge/docker-timeseer_traefik-yellow.svg)](https://github.com/timeseer-ai/timeseer-ansible-collection/tree/master/timeseer/docker/roles/traefik)
 
 - **timeseer_data_service**: Deploys timeseer_data_service ,handling storage preparation,docker volumes, and deployment.  
-  [![Ansible Galaxy](https://img.shields.io/badge/docker-timeseer_traefik-yellow.svg)](https://github.com/timeseer-ai/timeseer-ansible-collection/tree/master/timeseer/docker/roles/timeseer_data_service)
+  [![Ansible Galaxy](https://img.shields.io/badge/docker-timeseer_data_service-yellow.svg)](https://github.com/timeseer-ai/timeseer-ansible-collection/tree/master/timeseer/docker/roles/timeseer_data_service)
 
 ---
 
