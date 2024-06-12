@@ -119,18 +119,19 @@ This YAML example sets up the Timeseer environment and maps necessary ports:
   hosts: <your host>
   become: true
   vars:
-    timeseer_config_dir: "/opt/config"
-    timeseer_ports: 8080:8080
+    install_dir: "/opt/"
 
   tasks:
     - name: Import Timeseer Docker role
       ansible.builtin.import_role:
         name: "timeseer.docker.timeseer"
+      vars:
+        timeseer_config_dir: "{{ install_dir }}/config"
 
     - name: Configure Timeseer
       ansible.builtin.copy:
         src: "{{ item }}"
-        dest: "{{ timeseer_config_dir }}/{{ item | basename }}"
+        dest: "{{ install_dir }}/config/{{ item | basename }}"
         mode: "0644"
       with_fileglob: "config/*.toml"
       notify:
@@ -139,6 +140,7 @@ This YAML example sets up the Timeseer environment and maps necessary ports:
   handlers:
     - name: Restart Timeseer
       ansible.builtin.command: docker restart timeseer
+
 ```
 
 ### Additional Tips

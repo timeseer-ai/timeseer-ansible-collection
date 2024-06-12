@@ -85,20 +85,19 @@ host = "0.0.0.0"
   hosts: <your host>
   become: true
   vars:
-    timeseer_config_dir: "/opt/config"
-    timeseer_reverse_proxy_config_dir: "/opt/proxy-config"
-    timeseer_reverse_proxy_ports: "8080:8000"
-    timeseer_reverse_proxy_enable: true
+    install_dir: "/opt/"
 
   tasks:
     - name: Import Timeseer Docker role
       ansible.builtin.import_role:
         name: "timeseer.docker.timeseer"
+      vars:
+        timeseer_config_dir: "{{ install_dir }}/config"
 
     - name: Configure Timeseer
       ansible.builtin.copy:
         src: "{{ item }}"
-        dest: "{{ timeseer_config_dir }}/{{ item | basename }}"
+        dest: "{{ install_dir }}/config/{{ item | basename }}"
         mode: "0644"
       with_fileglob: "config/*.toml"
       notify:
@@ -107,11 +106,14 @@ host = "0.0.0.0"
     - name: Import Timeseer Reverse Proxy role
       ansible.builtin.import_role:
         name: "timeseer.docker.timeseer_reverse_proxy"
+      vars:
+        timeseer_reverse_proxy_config_dir: "{{ install_dir }}/proxy-config"
+        timeseer_reverse_proxy_enable: true
 
     - name: Configure Timeseer Reverse Proxy
       ansible.builtin.copy:
         src: "{{ item }}"
-        dest: "{{ timeseer_reverse_proxy_config_dir }}/{{ item | basename }}"
+        dest: "{{ install_dir }}/proxy-config/{{ item | basename }}"
         mode: "0644"
       with_fileglob: "proxy-config/*.toml"
       notify:
@@ -123,6 +125,7 @@ host = "0.0.0.0"
 
     - name: Restart Timeseer Reverse Proxy
       ansible.builtin.command: docker restart timeseer-reverse-proxy
+
 ```
 
 
