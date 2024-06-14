@@ -4,7 +4,7 @@
 
 [![Ansible Galaxy](https://img.shields.io/badge/ansible--galaxy-timeseer-yellow.svg)](https://galaxy.ansible.com/ui/namespaces/timeseer/)
 
-This Ansible role is designed for setting up timeseer, a time-series data analysis platform, particularly in a podmanized environment. It handles storage directory preparations, podman volume configurations, and manages the deployment of timeseer in a podman container.
+This Ansible role is designed for setting up timeseer, a time-series data analysis platform, particularly in a podman environment. It handles storage directory preparations, podman volume configurations, and manages the deployment of timeseer in a podman container.
 
 ## Requirements
 
