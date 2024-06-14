@@ -85,7 +85,7 @@ host = "0.0.0.0"
   hosts: <your host>
   become: true
   vars:
-    install_dir: "/opt/"
+    install_dir: "/opt/timeseer"
 
   tasks:
     - name: Import Timeseer Docker role

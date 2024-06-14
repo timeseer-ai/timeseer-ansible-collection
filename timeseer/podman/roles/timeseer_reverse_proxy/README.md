@@ -85,20 +85,19 @@ host = "0.0.0.0"
   hosts: <your host>
   become: true
   vars:
-    timeseer_config_dir: "/opt/config"
-    timeseer_reverse_proxy_config_dir: "/opt/proxy-config"
-    timeseer_reverse_proxy_ports: "8080:8000"
-    timeseer_reverse_proxy_enable: true
+    install_dir: "/opt/timeseer"
 
   tasks:
     - name: Import Timeseer podman role
       ansible.builtin.import_role:
         name: "timeseer.podman.timeseer"
+      vars:
+        timeseer_config_dir: "{{ install_dir }}/config"
 
     - name: Configure Timeseer
       ansible.builtin.copy:
         src: "{{ item }}"
-        dest: "{{ timeseer_config_dir }}/{{ item | basename }}"
+        dest: "{{ install_dir }}/config/{{ item | basename }}"
         mode: "0644"
       with_fileglob: "config/*.toml"
       notify:
@@ -107,11 +106,14 @@ host = "0.0.0.0"
     - name: Import Timeseer Reverse Proxy role
       ansible.builtin.import_role:
         name: "timeseer.podman.timeseer_reverse_proxy"
+      vars:
+        timeseer_reverse_proxy_config_dir: "{{ install_dir }}/proxy-config"
+        timeseer_reverse_proxy_enable: true
 
     - name: Configure Timeseer Reverse Proxy
       ansible.builtin.copy:
         src: "{{ item }}"
-        dest: "{{ timeseer_reverse_proxy_config_dir }}/{{ item | basename }}"
+        dest: "{{ install_dir }}/proxy-config/{{ item | basename }}"
         mode: "0644"
       with_fileglob: "proxy-config/*.toml"
       notify:
@@ -123,6 +125,7 @@ host = "0.0.0.0"
 
     - name: Restart Timeseer Reverse Proxy
       ansible.builtin.command: podman restart timeseer-reverse-proxy
+
 ```
 
 
@@ -131,7 +134,7 @@ host = "0.0.0.0"
 Here are the variables used in this role, complete with their default values found in defaults/main.yml:
 
 - `timeseer_reverse_proxy_dir`: Directory for the reverse proxy configuration. (default: `"/opt/timeseer/reverse_proxy"`)
-- `timeseer_reverse_proxy_image`: podman image for the Timeseer reverse proxy. (default: `"container.timeseer.ai/reverse_proxy"`)
+- `timeseer_reverse_proxy_image`: podman image for the Timeseer reverse proxy. (default: `"podman.timeseer.ai/reverse_proxy"`)
 - `timeseer_reverse_proxy_config_dir`: Optional directory for custom reverse proxy configurations. (default: `""`)
 - `timeseer_reverse_proxy_journal_tag`: Tag for journal logging. (default: `"TIMESEER_PROXY"`)
 - `timeseer_reverse_proxy_ports`: Custom port mapping for the Timeseer reverse proxy container. This should be specified in the podman port mapping format (e.g., `"8080:8080"`). (default: `""`)

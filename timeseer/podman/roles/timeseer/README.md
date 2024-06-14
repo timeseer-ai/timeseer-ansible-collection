@@ -4,13 +4,13 @@
 
 [![Ansible Galaxy](https://img.shields.io/badge/ansible--galaxy-timeseer-yellow.svg)](https://galaxy.ansible.com/ui/namespaces/timeseer/)
 
-This Ansible role is designed for setting up timeseer, a time-series data analysis platform, particularly in a podman environment. It handles storage directory preparations, podman volume configurations, and manages the deployment of timeseer in a podman container.
+This Ansible role is designed for setting up timeseer, a time-series data analysis platform, particularly in a podmanized environment. It handles storage directory preparations, podman volume configurations, and manages the deployment of timeseer in a podman container.
 
 ## Requirements
 
 - Ansible 2.9 or higher.
 - podman installed on the target machine.
-- `community.podman` Ansible collection.
+- `community podman` Ansible collection.
 
 
 ## Role Overview
@@ -119,18 +119,19 @@ This YAML example sets up the Timeseer environment and maps necessary ports:
   hosts: <your host>
   become: true
   vars:
-    timeseer_config_dir: "/opt/config"
-    timeseer_ports: 8080:8080
+    install_dir: "/opt/timeseer"
 
   tasks:
     - name: Import Timeseer podman role
       ansible.builtin.import_role:
-        name: "timeseer.podman.timeseer"
+        name: "timeseer podman.timeseer"
+      vars:
+        timeseer_config_dir: "{{ install_dir }}/config"
 
     - name: Configure Timeseer
       ansible.builtin.copy:
         src: "{{ item }}"
-        dest: "{{ timeseer_config_dir }}/{{ item | basename }}"
+        dest: "{{ install_dir }}/config/{{ item | basename }}"
         mode: "0644"
       with_fileglob: "config/*.toml"
       notify:
@@ -139,6 +140,7 @@ This YAML example sets up the Timeseer environment and maps necessary ports:
   handlers:
     - name: Restart Timeseer
       ansible.builtin.command: podman restart timeseer
+
 ```
 
 ### Additional Tips
@@ -151,7 +153,7 @@ Here are the variables used in this role, complete with their default values fou
 
 - `timeseer_dir`: Base directory for Timeseer data and configurations. (default: `"/opt/timeseer"`)
 - `timeseer_db_dir`: Directory for Timeseer database files. (default: `"/opt/timeseer"`)
-- `timeseer_podman_volume`: Optional podman volume for Timeseer storage. (default: `""`)
+- `timeseer podman_volume`: Optional podman volume for Timeseer storage. (default: `""`)
 - `timeseer_network`: Name of the podman network for Timeseer. (default: `"timeseer"`)
 - `timeseer_image`: podman image for Timeseer. (default: `"container.timeseer.ai/timeseer"`)
 - `timeseer_download_demo_data`: Whether to download demo data for Timeseer. (default: `false`)
