@@ -109,7 +109,7 @@ host = "0.0.0.0"
       vars:
         timeseer_reverse_proxy_config_dir: "{{ install_dir }}/proxy-config"
         timeseer_reverse_proxy_enable: true
-        timeseer_reverse_proxy_ports: 0.0.0.0:8000
+        timeseer_reverse_proxy_ports: "8080:8000"
 
     - name: Configure Timeseer Reverse Proxy
       ansible.builtin.copy:
