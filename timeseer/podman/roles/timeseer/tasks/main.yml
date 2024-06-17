@@ -48,6 +48,7 @@
     name: timeseer
     image: "{{ timeseer_image }}"
     state: started
+    pull: always
     restart_policy: unless-stopped
     network: "{{timeseer_network}}"
     volumes: "{{ volume_list }}"

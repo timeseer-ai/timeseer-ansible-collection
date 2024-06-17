@@ -16,6 +16,7 @@
     image: "{{ timeseer_reverse_proxy_image }}"
     command: "/usr/bin/timeseer-reverse-proxy --config-file /usr/src/app/Timeseer-reverse-proxy.toml"
     state: started
+    pull: always
     restart_policy: unless-stopped
     network: "{{ timeseer_network }}"
     volumes: "{{ reverse_proxy_volume_list }}"

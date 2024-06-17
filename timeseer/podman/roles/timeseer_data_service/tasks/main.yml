@@ -16,14 +16,14 @@
   when: timeseer_data_service_podman_volume | default('') | trim == ''
 
 - name: Run ts-data-service as a container
-  community.podman.podman_container:
+  containers.podman.podman_container:
     name: timeseer-data-service
     image: "{{ timeseer_data_service_image }}"
     command: "/usr/bin/timeseer-data-service"
     state: started
+    pull: always
     restart_policy: unless-stopped
-    networks:
-      - name: "{{ timeseer_data_service_network }}"
+    network: "{{ timeseer_data_service_network }}"
     volumes: "{{ volume_list }}"
     log_driver: journald
     log_options:
