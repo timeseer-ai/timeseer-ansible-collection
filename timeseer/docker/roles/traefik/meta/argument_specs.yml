@@ -70,7 +70,8 @@ argument_specs:
 
       traefik_tls:
         description:
-          - Determines the method for obtaining SSL/TLS certificates. Use "ACME" to automatically obtain certificates using the ACME protocol. Use "certs" if you prefer to use your own pre-existing certificates.
+          - Determines the method for obtaining SSL/TLS certificates. Use "ACME" to automatically obtain certificates using the ACME protocol.
+            Use "certs" if you prefer to use your own pre-existing certificates.
         type: str
         default: "ACME"
 

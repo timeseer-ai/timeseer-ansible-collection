@@ -50,7 +50,7 @@
     state: started
     pull: "{{ timeseer_image_pull }}"
     restart_policy: unless-stopped
-    network: "{{timeseer_network}}"
+    network: "{{ timeseer_network }}"
     volumes: "{{ volume_list }}"
     log_driver: journald
     user: "1001"
