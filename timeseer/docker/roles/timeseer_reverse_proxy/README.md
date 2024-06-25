@@ -5,7 +5,7 @@
 [![Ansible Galaxy](https://img.shields.io/badge/ansible--galaxy-timeseer_reverse_proxy-yellow.svg)](https://galaxy.ansible.com/ui/namespaces/timeseer/)
 
 
-This Ansible role facilitates the setup and configuration of Timeseer and its reverse proxy in a Docker environment. The role includes tasks for preparing storage directories, configuring Docker volumes, managing Docker containers for timeseer, and setting up a reverse proxy for Timeseer.
+This Ansible role is designed to streamline the setup and configuration of timeseer reverse proxy within a Docker environment. The role handles tasks such as preparing storage directories, configuring Docker volumes, and setting up the reverse proxy 
 
 ## Requirements
 
