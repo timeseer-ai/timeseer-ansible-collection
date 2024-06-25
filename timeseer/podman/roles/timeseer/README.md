@@ -160,9 +160,11 @@ Here are the variables used in this role, complete with their default values fou
 - `timeseer_config_dir`: Optional directory for custom Timeseer configurations. (default: `""`)
 - `timeseer_ports`: Custom port mapping for the Timeseer container. This should be specified in the podman port mapping format (e.g., `"8080:8080"`). (default: `""`)
 - `timeseer_journal_tag`: Tag for journal logging. (default: `"TIMESEER"`)
-- `timeseer_image_pull`: Whether to pull the Timeseer podman image. (default: `true`)
-
-
+- `timeseer_image_pull`: (default: `newer`): Controls when to pull the container image, with options "missing", "always", "never", or "newer". 
+  - "missing": Pulls image if not present locally.
+  - "always": Always pulls image, ensuring the latest version.
+  - "never": Never pulls image, uses local version.
+  - "newer": Pulls image only if the registry version is newer than the local one.
 ---
 
 ## Dependencies

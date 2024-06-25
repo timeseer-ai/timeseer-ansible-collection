@@ -7,4 +7,4 @@ timeseer_data_service_image: "container.timeseer.ai/timeseer"
 timeseer_data_service_ports: "3000:3000"
 timeseer_data_service_network: timeseer
 timeseer_data_service_journal_tag: "TIMESEER-DS"
-timeseer_data_service_image_pull: true
+timeseer_data_service_image_pull: newer

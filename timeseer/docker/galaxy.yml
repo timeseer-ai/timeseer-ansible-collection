@@ -38,7 +38,6 @@ tags: [tools, timeseer, data, docker, podman]
 # range specifiers can be set and are separated by ','
 dependencies:
   community.docker: ">=3.10.0"
-  containers.podman: ">=1.15.0"
 
 # The URL of the originating SCM repository
 repository: https://github.com/timeseer-ai/timeseer-ansible-collection

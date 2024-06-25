@@ -64,7 +64,11 @@ Variables used in this role are listed below, along with default values (see `de
      - "0.0.0.0:3003:3000" (binds host port 3003 on all interfaces to container port 3000)
 - `timeseer_data_service_network` (default: `"timeseer"`): podman network to which the service connects.
 - `timeseer_data_service_journal_tag` (default: `"TIMESEER-DS"`): Tag used for logging purposes.
-- `timeseer_data_service_image_pull` (default: `true`): Whether to pull the latest podman image.
+- `timeseer_data_service_image_pull` (default: `newer`): Controls when to pull the container image, with options "missing", "always", "never", or "newer". 
+  - "missing": Pulls image if not present locally.
+  - "always": Always pulls image, ensuring the latest version.
+  - "never": Never pulls image, uses local version.
+  - "newer": Pulls image only if the registry version is newer than the local one.
 
 ## Dependencies
 

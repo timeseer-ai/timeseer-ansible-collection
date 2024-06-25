@@ -57,7 +57,19 @@ argument_specs:
         default: "TIMESEER-DS"
 
       timeseer_data_service_image_pull:
-        description:
-          - Whether to pull the Timeseer image from the podman registry before starting the container.
-        type: bool
-        default: true
+        description: Specifies when to pull the container image for the Timeseer data service, allowing control over the image version used.
+        type: str
+        default: "missing"
+      options:
+        - option:
+            name: "missing"
+            description: "Pulls the image if not present locally. This is the default setting."
+        - option:
+            name: "always"
+            description: "Always pulls the image to ensure the latest version."
+        - option:
+            name: "never"
+            description: "Does not pull the image, using the local version if available."
+        - option:
+            name: "newer"
+            description: "Pulls the image only if the registry version is newer than the local one."

@@ -8,12 +8,12 @@
 - name: Set storage path to podman volume
   ansible.builtin.set_fact:
     timeseer_data_service_storage_mount: "{{ timeseer_data_service_podman_volume }}"
-  when: timeseer_data_service_podman_volume | default('') | trim != ''
+  when: timeseer_data_service_podman_volume | default('') | trim != '' and timeseer_data_service_enable == true
 
 - name: Set storage path to timeseer default storage_path
   ansible.builtin.set_fact:
     timeseer_data_service_storage_mount: "{{ timeseer_data_service_dir }}"
-  when: timeseer_data_service_podman_volume | default('') | trim == ''
+  when: timeseer_data_service_podman_volume | default('') | trim == '' and timeseer_data_service_enable == true
 
 - name: Run ts-data-service as a container
   containers.podman.podman_container:
@@ -21,7 +21,7 @@
     image: "{{ timeseer_data_service_image }}"
     command: "/usr/bin/timeseer-data-service"
     state: started
-    pull: always
+    pull: "{{ timeseer_data_service_image_pull }}"
     restart_policy: unless-stopped
     network: "{{ timeseer_data_service_network }}"
     volumes: "{{ volume_list }}"
@@ -38,3 +38,4 @@
     custom_toml_volume:
       - "{{ timeseer_data_service_config_dir }}:/usr/src/app/Timeseer-data-service.toml"
     volume_list: "{{ base_volumes + (custom_toml_volume if timeseer_data_service_config_dir | default('') | trim != '' else []) }}"
+  when: timeseer_data_service_enable == true
