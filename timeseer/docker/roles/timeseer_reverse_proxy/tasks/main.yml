@@ -15,8 +15,8 @@
     name: timeseer-reverse-proxy
     image: "{{ timeseer_reverse_proxy_image }}"
     command: "/usr/bin/timeseer-reverse-proxy --config-file /usr/src/app/Timeseer-reverse-proxy.toml"
-    pull: "{{ timeseer_reverse_proxy_image_pull }}"
     state: started
+    pull: "{{ timeseer_reverse_proxy_image_pull }}"
     restart_policy: unless-stopped
     networks:
       - name: "{{ timeseer_network }}"
@@ -28,6 +28,8 @@
     tty: true
     ports: "{{ timeseer_reverse_proxy_ports if timeseer_reverse_proxy_ports and timeseer_reverse_proxy_ports != '' else omit }}"
   vars:
+    config_dir: "{{ timeseer_reverse_proxy_config_dir | default(timeseer_reverse_proxy_dir) }}"
+    selinux_suffix: "{{ ':z' if ansible_selinux['status'] == 'enabled' else '' }}"
     custom_toml_volume:
-      - "{{ timeseer_reverse_proxy_config_dir | default(timeseer_reverse_proxy_dir) }}:/usr/src/app/proxy-config{{ ':z' if ansible_selinux['status'] == 'enabled' else '' }}"
+      - "{{ config_dir }}:/usr/src/app/proxy-config{{ selinux_suffix }}"
     reverse_proxy_volume_list: "{{ custom_toml_volume if timeseer_reverse_proxy_config_dir | default('') | trim != '' else [] }}"
