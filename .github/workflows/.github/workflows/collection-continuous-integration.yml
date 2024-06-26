@@ -1,1 +1,73 @@
-#todo
+name: Collection build and tests
+
+on:
+  push:
+    tags:
+      - v*
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  lint:
+    name: Ansible Lint
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        runner-os:
+          - ubuntu-22.04
+        ansible-version:
+          - git+https://github.com/ansible/ansible.git@stable-2.15
+        runner-python-version:
+          - 3.9
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.runner-python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.runner-python-version }}
+
+      - name: Install Ansible ${{ matrix.ansible-version }}
+        run: |
+          sudo pip install '${{ matrix.ansible-version }}'
+
+      - name: Install Ansible Collections
+        run: >-
+          ansible-galaxy collection install community.docker containers.podman
+
+      - name: Run ansible-lint
+        uses: ansible/ansible-lint@main
+
+  build:
+    name: Build timeseer collection
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        runner-os:
+          - ubuntu-22.04
+        ansible-version:
+          - git+https://github.com/ansible/ansible.git@stable-2.15
+        runner-python-version:
+          - 3.9
+    needs: lint
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.runner-python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.runner-python-version }}
+
+      - name: Install Ansible ${{ matrix.ansible-version }}
+        run: |
+          sudo pip install '${{ matrix.ansible-version }}'
+
+      - name: Install Ansible Collections
+        run: >-
+          ansible-galaxy collection install community.docker containers.podman
+      - name: Build
+        run: ansible-galaxy collection build
