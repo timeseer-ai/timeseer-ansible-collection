@@ -69,5 +69,16 @@ jobs:
       - name: Install Ansible Collections
         run: >-
           ansible-galaxy collection install community.docker containers.podman
-      - name: Build
-        run: ansible-galaxy collection build
+
+      - name: Build Docker collection
+        run: ansible-galaxy collection build ./timeseer/docker/ -v --output-path ./artifacts
+
+      - name: Build podman collection
+        run: ansible-galaxy collection build ./timeseer/podman/ -v  --output-path ./artifacts
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: collections
+          path: artifacts/*.tar.gz
+          retention-days: 14
