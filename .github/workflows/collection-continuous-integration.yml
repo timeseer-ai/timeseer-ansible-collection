@@ -2,8 +2,6 @@ name: Collection build and tests
 
 on:
   push:
-    tags:
-      - v*
   pull_request:
     branches:
       - master
