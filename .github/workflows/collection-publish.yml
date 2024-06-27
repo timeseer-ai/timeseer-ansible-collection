@@ -68,7 +68,7 @@ jobs:
         run: ansible-galaxy collection build ./timeseer/podman/ -v  --output-path ./artifacts
 
       - name: Publish Docker Collection to Ansible Galaxy
-        run: ansible-galaxy collection publish ./artifacts/docker/*.tar.gz --api-key ${{ secrets.ANSIBLE_GALAXY_API_KEY }}
+        run: ansible-galaxy collection publish ./artifacts/timeseer-docker-*.tar.gz --api-key ${{ secrets.ANSIBLE_GALAXY_API_KEY }}
 
       - name: Publish Podman Collection to Ansible Galaxy
-        run: ansible-galaxy collection publish ./artifacts/podman/*.tar.gz --api-key ${{ secrets.ANSIBLE_GALAXY_API_KEY }}
+        run: ansible-galaxy collection publish ./artifacts/timeseer-podman-*.tar.gz --api-key ${{ secrets.ANSIBLE_GALAXY_API_KEY }}
