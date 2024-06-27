@@ -12,8 +12,8 @@ For more detailed information, visit the [Timeseer.AI website](https://www.times
 - docker installed on the target machine.
 - `community.docker` Ansible collection.
 - `containers.podman collection` Ansible collection if you are using podman
----
 
+---
 
 ## Roles
 
@@ -48,7 +48,7 @@ $ ansible-galaxy collection install timeseer.docker
 To install a specific version, append the version number:
 
 ```bash
-$ ansible-galaxy collection install timeseer.docker:1.0.2
+$ ansible-galaxy collection install timeseer.docker:1.0.3
 ```
 
 ## Overwriting Existing Collections
@@ -56,7 +56,7 @@ $ ansible-galaxy collection install timeseer.docker:1.0.2
 Use --force to overwrite any existing collections:
 
 ```bash
-$ ansible-galaxy collection install --force timeseer.docker:1.0.2
+$ ansible-galaxy collection install --force timeseer.docker:1.0.3
 ```
 
 More information can be found in the [official Ansible documentation](https://docs.ansible.com/).
