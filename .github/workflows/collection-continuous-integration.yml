@@ -42,7 +42,7 @@ jobs:
 
       - name: Install Ansible lint
         run: >-
-          sudo pip install ansible-lint
+          pip install ansible-lint
 
       - name: Verify Ansible lint installation
         run: |
