@@ -32,25 +32,13 @@ jobs:
         run: |
           pip install ansible-core==${{ matrix.ansible-version }}
 
-      - name: Verify Ansible installation
-        run: |
-          ansible --version
-
       - name: Install Ansible Collections
         run: |
           ansible-galaxy collection install -r requirements.yml
 
-      - name: Verify Ansible Collections installation
-        run: |
-          ansible-galaxy collection list
-
       - name: Install Ansible lint
         run: >-
           pip install ansible-lint
-
-      - name: Verify Ansible lint installation
-        run: |
-          ansible-lint --version
 
       - name: Run ansible-lint
         run: >-
