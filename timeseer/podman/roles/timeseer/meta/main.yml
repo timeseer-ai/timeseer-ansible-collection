@@ -1,0 +1,7 @@
+dependencies: []
+galaxy_info:
+  author: Diogo Lobo
+  role_name: timeseer
+  description: configure timeseer
+  license: license (MIT)
+  min_ansible_version: 2.5

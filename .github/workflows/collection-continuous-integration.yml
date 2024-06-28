@@ -36,8 +36,13 @@ jobs:
         run: >-
           ansible-galaxy collection install community.docker containers.podman
 
+      - name: Install Ansible Collections
+        run: >-
+          sudo pip install ansible-lint
+
       - name: Run ansible-lint
-        uses: ansible/ansible-lint@main
+        run: >-
+          ansible-lint
 
   build:
     name: Build timeseer collection
@@ -54,11 +59,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Set up Python ${{ matrix.runner-python-version }}
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.runner-python-version }}
 
       - name: Install Ansible ${{ matrix.ansible-version }}
         run: |

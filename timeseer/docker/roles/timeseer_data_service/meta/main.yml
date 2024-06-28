@@ -1,0 +1,7 @@
+dependencies: []
+galaxy_info:
+  authors: jeroen@timeseer.ai,diogo@timeseer.ai
+  role_name: timeseer_data_service
+  description: configure timeseer_data_service
+  license: license (MIT)
+  min_ansible_version: 2.5
