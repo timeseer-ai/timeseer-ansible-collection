@@ -37,8 +37,12 @@ jobs:
           ansible --version
 
       - name: Install Ansible Collections
-        run: >-
-          ansible-galaxy collection install community.docker containers.podman
+        run: |
+          ansible-galaxy collection install -r requirements.yml
+
+      - name: Verify Ansible Collections installation
+        run: |
+          ansible-galaxy collection list
 
       - name: Install Ansible lint
         run: >-
