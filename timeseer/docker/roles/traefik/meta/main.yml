@@ -1,7 +1,7 @@
 dependencies: []
 galaxy_info:
-  authors: jeroen@timeseer.ai,diogo@timeseer.ai
-  role_name: timeseer traefik
+  author: Jeroen Hoekx, Diogo Lobo
+  role_name: traefik
   description: configure traefik for timeseer
   license: license (MIT)
-  min_ansible_version: 2.5
+  min_ansible_version: "2.5"
