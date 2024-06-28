@@ -30,7 +30,7 @@ jobs:
 
       - name: Install specific Ansible version ${{ matrix.ansible-version }}
         run: |
-          sudo pip install ansible-core==${{ matrix.ansible-version }}
+          pip install ansible-core==${{ matrix.ansible-version }}
 
       - name: Verify Ansible installation
         run: |
