@@ -32,13 +32,21 @@ jobs:
         run: |
           sudo pip install '${{ matrix.ansible-version }}'
 
+      - name: Verify Ansible installation
+        run: |
+          ansible --version
+
       - name: Install Ansible Collections
         run: >-
           ansible-galaxy collection install community.docker containers.podman
 
-      - name: Install Ansible Collections
+      - name: Install Ansible lint
         run: >-
           sudo pip install ansible-lint
+
+      - name: Verify Ansible lint installation
+        run: |
+          ansible-lint --version
 
       - name: Run ansible-lint
         run: >-
