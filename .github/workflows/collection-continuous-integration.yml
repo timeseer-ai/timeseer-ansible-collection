@@ -16,7 +16,7 @@ jobs:
         runner-os:
           - ubuntu-22.04
         ansible-version:
-          - "2.15.12"
+          - "2.17.1"
         runner-python-version:
           - 3.10.12
     steps:
@@ -52,7 +52,7 @@ jobs:
         runner-os:
           - ubuntu-22.04
         ansible-version:
-          - git+https://github.com/ansible/ansible.git@stable-2.17
+          - "2.17.1"
         runner-python-version:
           - 3.9
     needs: lint
@@ -60,9 +60,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install Ansible ${{ matrix.ansible-version }}
+      - name: Install specific Ansible version ${{ matrix.ansible-version }}
         run: |
-          sudo pip install '${{ matrix.ansible-version }}'
+          pip install ansible-core==${{ matrix.ansible-version }}
 
       - name: Build Docker collection
         run: ansible-galaxy collection build ./timeseer/docker/ -v --output-path ./artifacts
