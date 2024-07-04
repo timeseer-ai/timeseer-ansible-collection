@@ -1,0 +1,8 @@
+- name: Reload systemd daemon
+  ansible.builtin.systemd:
+    daemon_reload: true
+
+- name: Restart timeseer service
+  ansible.builtin.systemd:
+    name: timeseer-container
+    state: restarted

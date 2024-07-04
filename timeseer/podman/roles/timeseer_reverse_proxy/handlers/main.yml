@@ -1,0 +1,8 @@
+- name: Reload systemd daemon for timeseer-reverse-proxy-container service
+  ansible.builtin.systemd:
+    daemon_reload: true
+
+- name: Restart timeseer-reverse-proxy-container service
+  ansible.builtin.systemd:
+    name: timeseer-reverse-proxy-container
+    state: restarted

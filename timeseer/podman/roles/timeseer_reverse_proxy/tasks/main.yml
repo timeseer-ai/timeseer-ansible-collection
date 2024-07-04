@@ -1,29 +1,46 @@
 - name: Prepare configuration directory
   ansible.builtin.file:
     path: "{{ timeseer_reverse_proxy_dir }}"
-    mode: "0755"
     state: directory
+    mode: "0755"
 
 - name: Create a file for environment variables
   ansible.builtin.file:
     path: "{{ timeseer_reverse_proxy_dir }}/env"
-    mode: "0644"
     state: touch
+    mode: "0644"
 
-- name: Run Timeseer Reverse Proxy in a podman container
+- name: Set config_dir for Timeseer Reverse Proxy
+  ansible.builtin.set_fact:
+    config_dir: "{{ timeseer_reverse_proxy_config_dir | default(timeseer_reverse_proxy_dir) }}"
+
+- name: Check for timeseer-reverse-proxy file state
+  ansible.builtin.stat:
+    path: /etc/containers/systemd/timeseer-reverse-proxy-container.container
+  register: reverse_proxy_config_file
+
+- name: Create a Timeseer Reverse Proxy quadlet file
   containers.podman.podman_container:
     name: timeseer-reverse-proxy
     image: "{{ timeseer_reverse_proxy_image }}"
     command: "/usr/bin/timeseer-reverse-proxy --config-file /usr/src/app/Timeseer-reverse-proxy.toml"
-    state: started
+    state: quadlet
+    quadlet_filename: timeseer-reverse-proxy-container
+    quadlet_options:
+      - |
+        [Service]
+        Restart=always
+        [Install]
+        WantedBy=default.target
     pull: "{{ timeseer_reverse_proxy_image_pull }}"
-    restart_policy: unless-stopped
-    network: "{{ timeseer_network }}"
+    network: "{{ timeseer_reverse_proxy_network }}"
     volumes: "{{ reverse_proxy_volume_list }}"
-    env_file: "{{ timeseer_reverse_proxy_dir }}/env"
     log_driver: journald
     log_options:
       tag: "{{ timeseer_reverse_proxy_journal_tag }}"
+      path: "/dev/null"
+      max_size: "0"
+    env_file: "{{ timeseer_reverse_proxy_dir }}/env"
     tty: true
     ports: "{{ timeseer_reverse_proxy_ports if timeseer_reverse_proxy_ports and timeseer_reverse_proxy_ports != '' else omit }}"
   vars:
@@ -32,3 +49,21 @@
     custom_toml_volume:
       - "{{ config_dir }}:/usr/src/app/proxy-config{{ selinux_suffix }}"
     reverse_proxy_volume_list: "{{ custom_toml_volume if timeseer_reverse_proxy_config_dir | default('') | trim != '' else [] }}"
+  notify:
+    - Reload systemd daemon for timeseer-reverse-proxy-container service
+    - Restart timeseer-reverse-proxy-container service
+
+- name: Handle file not existing
+  ansible.builtin.systemd:
+    daemon_reload: true
+  when: not reverse_proxy_config_file.stat.exists
+
+- name: Enable timeseer-reverse-proxy-container service
+  ansible.builtin.systemd:
+    name: timeseer-reverse-proxy-container
+    enabled: true
+
+- name: Start timeseer-reverse-proxy-container service
+  ansible.builtin.systemd:
+    name: timeseer-reverse-proxy-container
+    state: started

@@ -1,4 +1,4 @@
-- name: Prepare a storage directory for ts-data-service
+- name: Prepare a storage directory for timeseer-data-service
   ansible.builtin.file:
     path: "{{ timeseer_data_service_dir }}"
     state: directory
@@ -15,27 +15,58 @@
     timeseer_data_service_storage_mount: "{{ timeseer_data_service_dir }}"
   when: timeseer_data_service_podman_volume | default('') | trim == '' and timeseer_data_service_enable
 
-- name: Run ts-data-service as a container
+- name: Check for timeseer-data-service file state
+  ansible.builtin.stat:
+    path: /etc/containers/systemd/timeseer-data-service-container.container
+  register: data_service_config_file
+
+- name: Create ts-data-service quadlet container
   containers.podman.podman_container:
     name: timeseer-data-service
     image: "{{ timeseer_data_service_image }}"
     command: "/usr/bin/timeseer-data-service"
-    state: started
+    state: quadlet
     pull: "{{ timeseer_data_service_image_pull }}"
-    restart_policy: unless-stopped
+    quadlet_filename: timeseer-data-service-container
+    quadlet_options:
+      - |
+        [Service]
+        Restart=always
+        [Install]
+        WantedBy=default.target
     network: "{{ timeseer_data_service_network }}"
-    volumes: "{{ volume_list }}"
+    volumes: "{{ data_service_volume_list }}"
     log_driver: journald
     log_options:
       tag: "{{ timeseer_data_service_journal_tag }}"
+      path: "/dev/null"
+      max_size: "0"
     env:
       RUST_LOG: info
     tty: true
     ports: "{{ timeseer_data_service_ports }}"
   vars:
-    base_volumes:
+    volumes:
       - "{{ timeseer_data_service_storage_mount }}:/usr/src/app/data-service"
-    custom_toml_volume:
+    toml_volume:
       - "{{ timeseer_data_service_config_dir }}:/usr/src/app/Timeseer-data-service.toml"
-    volume_list: "{{ base_volumes + (custom_toml_volume if timeseer_data_service_config_dir | default('') | trim != '' else []) }}"
+    volume_list: "{{ volumes + (toml_volume if timeseer_data_service_config_dir | default('') | trim != '' else []) }}"
   when: timeseer_data_service_enable
+  notify:
+    - Reload systemd daemon for timeseer-data-service-container service
+    - Restart timeseer-data-service-container service
+
+- name: Handle file not existing
+  ansible.builtin.systemd:
+    daemon_reload: true
+  when: not data_service_config_file.stat.exists
+
+- name: Enable timeseer-data-service-container service
+  ansible.builtin.systemd:
+    name: timeseer-data-service-container
+    enabled: true
+
+- name: Start timeseer-data-service-container service
+  ansible.builtin.systemd:
+    name: timeseer-data-service-container
+    state: started
