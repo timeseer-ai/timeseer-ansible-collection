@@ -50,7 +50,7 @@
       - "{{ timeseer_data_service_storage_mount }}:/usr/src/app/data-service"
     toml_volume:
       - "{{ timeseer_data_service_config_dir }}:/usr/src/app/Timeseer-data-service.toml"
-    volume_list: "{{ volumes + (toml_volume if timeseer_data_service_config_dir | default('') | trim != '' else []) }}"
+    data_service_volume_list: "{{ volumes + (toml_volume if timeseer_data_service_config_dir | default('') | trim != '' else []) }}"
   when: timeseer_data_service_enable
   notify:
     - Reload systemd daemon for timeseer-data-service-container service
