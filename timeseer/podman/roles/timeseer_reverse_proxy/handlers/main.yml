@@ -1,8 +1,17 @@
-- name: Reload systemd daemon for timeseer-reverse-proxy-container service
-  ansible.builtin.systemd:
+- name: Signal daemon Restart for timeseer-reverse-proxy
+  ansible.builtin.set_fact:
     daemon_reload: true
+  when: item.changed
+  loop: "{{ timeseer_proxy_j2.results }}"
+  loop_control:
+    label: "{{ item.dest }}"
 
-- name: Restart timeseer-reverse-proxy-container service
+- name: Reload systemd daemon for timeseer-reverse-proxy
   ansible.builtin.systemd:
-    name: timeseer-reverse-proxy-container
+    daemon_reload: "{{ daemon_reload }}"
+  when: daemon_reload | default(false) | bool
+
+- name: Restart timeseer-reverse-proxy
+  ansible.builtin.systemd:
+    name: ts-reverse-proxy-container
     state: restarted

@@ -1,8 +1,17 @@
+- name: Signal daemon Restart
+  ansible.builtin.set_fact:
+    daemon_reload: true
+  when: item.changed
+  loop: "{{ timeseer_j2.results }}"
+  loop_control:
+    label: "{{ item.dest }}"
+
 - name: Reload systemd daemon
   ansible.builtin.systemd:
-    daemon_reload: true
+    daemon_reload: "{{ daemon_reload }}"
+  when: daemon_reload | default(false) | bool
 
 - name: Restart timeseer service
   ansible.builtin.systemd:
-    name: timeseer-container
+    name: ts-container
     state: restarted

@@ -1,0 +1,31 @@
+[Unit]
+Wants=network.target
+After=network.target
+
+
+[Container]
+ContainerName=timeseer-data-service
+Environment=RUST_LOG=info
+Exec=/usr/bin/timeseer-data-service
+LogDriver=journald
+Image={{ timeseer_data_service_image }}
+Network={{ timeseer_data_service_network }}
+PublishPort={{ timeseer_data_service_ports }}
+Pull={{ timeseer_data_service_image_pull }}
+{% for volume in data_service_volume_list %}
+Volume={{ volume }}
+{% endfor %}
+PodmanArgs=--log-opt tag={{ timeseer_data_service_journal_tag }}
+PodmanArgs=--tty
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=network-online.target
+
+
+
+
+
+

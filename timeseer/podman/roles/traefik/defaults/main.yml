@@ -5,7 +5,6 @@ traefik_journal_tag: "TRAEFIK"
 traefik_host: "localhost"
 traefik_letsencrypt_mail: ""
 traefik_basic_auth_enable: false
-traefik_recreate_container: false
 traefik_tls: "acme"
 traefik_basic_auth_users: []
 traefik_expose_flight: false

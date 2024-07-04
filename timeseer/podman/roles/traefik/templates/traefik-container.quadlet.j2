@@ -1,0 +1,27 @@
+[Unit]
+Wants=network.target
+After=network.target
+
+[Container]
+ContainerName=traefik
+Image={{ traefik_image }}
+Network={{ traefik_network }}
+{% for port in ports_list %}
+PublishPort={{ port }}
+{% endfor %}
+{% for volume in traefik_volume_list %}
+Volume={{ volume }}
+{% endfor %}
+PodmanArgs=--log-opt tag={{ traefik_journal_tag }}
+PodmanArgs=--tty
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=network-online.target
+
+
+
+
+

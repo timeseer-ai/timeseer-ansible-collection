@@ -23,10 +23,15 @@
     timeseer_storage_mount: "{{ timeseer_db_dir }}/db"
   when: timeseer_podman_volume | default('') | trim == ''
 
-- name: Check for timeseer-reverse-proxy file state
-  ansible.builtin.stat:
-    path: /etc/containers/systemd/timeseer-container.container
-  register: timeseer_config_file
+- name: Define timeseer volume list
+  ansible.builtin.set_fact:
+    timeseer_volume_list: "{{ timeseer_base_volumes + (timeseer_custom_toml_volume if timeseer_config_dir | default('') | trim != '' else []) }}"
+  vars:
+    timeseer_base_volumes:
+      - "{{ timeseer_dir }}/data:/usr/src/app/data"
+      - "{{ timeseer_storage_mount }}:/usr/src/app/db{{ ':z' if ansible_selinux['status'] == 'enabled' else '' }}"
+    timeseer_custom_toml_volume:
+      - "{{ timeseer_config_dir }}:/usr/src/app/config/:ro"
 
 - name: Create a podman network
   containers.podman.podman_network:
@@ -48,7 +53,7 @@
     tty: true
   when: timeseer_download_demo_data
 
-- name: Create timeseer quadlet file
+- name: Create timeseer quadlet container
   containers.podman.podman_container:
     name: timeseer
     image: "{{ timeseer_image }}"
@@ -56,53 +61,33 @@
     network: "{{ timeseer_network }}"
     volumes: "{{ timeseer_volume_list }}"
     state: quadlet
-    quadlet_filename: timeseer-container
-    quadlet_options:
-      - |
-        [Service]
-        Restart=always
-        [Install]
-        WantedBy=default.target
     ports: "{{ timeseer_ports if timeseer_ports and timeseer_ports != '' else omit }}"
     log_options:
-      tag: "{{ timeseer_reverse_proxy_journal_tag }}"
-      path: "/dev/null"
-      max_size: "0"
+      tag: "{{ timeseer_journal_tag }}"
     tty: true
-  vars:
-    timeseer_base_volumes:
-      - "{{ timeseer_dir }}/data:/usr/src/app/data"
-      - "{{ timeseer_storage_mount }}:/usr/src/app/db{{ ':z' if ansible_selinux['status'] == 'enabled' else '' }}"
-    timeseer_custom_toml_volume:
-      - "{{ timeseer_config_dir }}:/usr/src/app/config/:ro"
-    timeseer_volume_list: "{{ timeseer_base_volumes + (timeseer_custom_toml_volume if timeseer_config_dir | default('') | trim != '' else []) }}"
+
+- name: Template configuration files
+  ansible.builtin.template:
+    src: "{{ item }}"
+    dest: "/etc/containers/systemd/ts-container.container"
+    mode: "0644"
+  loop:
+    - "timeseer-container.quadlet.j2"
+  register: timeseer_j2
   notify:
+    - Signal daemon Restart
     - Reload systemd daemon
     - Restart timeseer service
 
-- name: Check if linger is enabled
-  ansible.builtin.command:
-    cmd: "loginctl show-user {{ ansible_user }} -p Linger"
-  changed_when: false
-  register: linger_status
-
-- name: Handle file not existing
-  ansible.builtin.systemd:
-    daemon_reload: true
-  when: not timeseer_config_file.stat.exists
-
-- name: Enable linger for the user if not already enabled
-  ansible.builtin.command:
-    cmd: "loginctl enable-linger {{ ansible_user }}"
-  when: "'Linger=yes' not in linger_status.stdout"
-  changed_when: "linger_status.stdout.find('Linger=yes') == -1"
+- name: Flush Handlers to apply changes immediately
+  ansible.builtin.meta: flush_handlers
 
 - name: Enable timeseer-container service
   ansible.builtin.systemd:
-    name: timeseer-container
+    name: ts-container
     enabled: true
 
 - name: Start timeseer-container service
   ansible.builtin.systemd:
-    name: timeseer-container
+    name: ts-container
     state: started
