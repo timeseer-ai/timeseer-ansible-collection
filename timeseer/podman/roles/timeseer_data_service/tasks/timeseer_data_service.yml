@@ -1,0 +1,8 @@
+- name: Template Timeseer data service configuration file
+  ansible.builtin.template:
+    src: "timeseer-data-service-container.quadlet"
+    dest: "/etc/containers/systemd/timeseer-data-service.container"
+    mode: "0644"
+  register: timeseer_data_service_container
+  notify:
+    - Restart timeseer-data-service service

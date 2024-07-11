@@ -1,8 +1,5 @@
-- name: Reload systemd daemon for timeseer-data-service-container service
+- name: Restart timeseer-data-service service
   ansible.builtin.systemd:
-    daemon_reload: true
-
-- name: Restart timeseer-data-service-container
-  ansible.builtin.systemd:
-    name: timeseer-data-service-container
+    name: timeseer-data-service
     state: restarted
+  when: timeseer_data_service_status  is not changed

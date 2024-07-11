@@ -28,16 +28,8 @@
   ansible.builtin.set_fact:
     timeseer_data_service_network: "systemd-{{ timeseer_data_service_network }}"
 
-- name: Template configuration files
-  ansible.builtin.template:
-    src: "{{ item }}"
-    dest: "/etc/containers/systemd/timeseer-data-service.container"
-    mode: "0644"
-  loop:
-    - "timeseer-data-service-container.quadlet"
-  register: timeseer_data_service_container
-  notify:
-    - Restart timeseer-data-service service
+- name: Include Timeseer data service tasks
+  ansible.builtin.include_tasks: timeseer_data_service.yml
   when: timeseer_data_service_enable
 
 - name: Reload systemd daemon to ensure timeseer-data-service container is known
@@ -45,7 +37,7 @@
     daemon_reload: true
   when: timeseer_data_service_container.changed and timeseer_data_service_enable # noqa: no-handler
 
-- name: Check if timeseer data service is enabled
+- name: Start and Enable Timeseer-data-service
   ansible.builtin.systemd:
     name: timeseer-data-service
     enabled: true

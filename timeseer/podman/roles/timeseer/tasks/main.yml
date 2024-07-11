@@ -68,7 +68,7 @@
     daemon_reload: true
   when: timeseer_container.changed # noqa: no-handler
 
-- name: Check if timeseer service is enabled
+- name: Start and Enable Timeseer
   ansible.builtin.systemd:
     name: timeseer
     enabled: true
