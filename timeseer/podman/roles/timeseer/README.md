@@ -17,6 +17,27 @@ This Ansible role is designed for setting up timeseer, a time-series data analys
 
 The `timeseer` role is primarily intended for deploying the Timeseer podman container. It is ideally suited for a limited Proof of Concept (POC) involving 1-2 users. This setup does not require authentication or a web server and can be run locally.
 
+### Role Overview
+
+The `timeseer` role is primarily intended for deploying the Timeseer Podman container. It is ideally suited for a limited Proof of Concept (POC) involving 1-2 users. This setup does not require authentication or a web server and can be run locally.
+
+The role uses Quadlet files and natively integrates with systemd, so to start, stop, or restart the container, you will need to use `systemctl` commands. Here are the commands:
+
+- Start the container:
+  ```shell
+  sudo systemctl start timeseer
+  ```
+
+- Stop the container:
+  ```shell
+  sudo systemctl stop timeseer
+  ```
+
+- Restart the container:
+  ```shell
+  sudo systemctl restart timeseer
+  ```
+
 ### Installation Directory
 
 By default, the `timeseer` role creates the following directories on your local machine:
@@ -54,8 +75,11 @@ This YAML snippet demonstrates how to configure and restart Timeseer using `ansi
 #### Handler for Restarting Timeseer
 
 ```yaml
-- name: Restart Timeseer
-  ansible.builtin.command: podman restart timeseer
+ - name: Restart Timeseer
+      ansible.builtin.systemd:
+        name: timeseer
+        state: restarted
+        daemon_reload: false
 ```
 
 #### TOML Configuration Example
@@ -139,7 +163,11 @@ This YAML example sets up the Timeseer environment and maps necessary ports:
 
   handlers:
     - name: Restart Timeseer
-      ansible.builtin.command: podman restart timeseer
+      ansible.builtin.systemd:
+        name: timeseer
+        state: restarted
+        daemon_reload: false
+
 
 ```
 
