@@ -43,7 +43,7 @@
     daemon_reload: true
   when: timeseer_reverse_proxy_container.changed # noqa: no-handler
 
-- name: Check if timeseer data service is enabled
+- name: Start and Enable Timeseer-reverse-proxy
   ansible.builtin.systemd:
     name: timeseer-reverse-proxy
     enabled: true

@@ -70,7 +70,7 @@
     daemon_reload: true
   when: traefik_container_config.changed # noqa: no-handler
 
-- name: Check if traefik service is enabled
+- name: Start and Enable traefik
   ansible.builtin.systemd:
     name: traefik
     enabled: true
