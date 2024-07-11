@@ -23,7 +23,7 @@
     custom_toml_volume:
       - "{{ config_dir }}:/usr/src/app/proxy-config{{ selinux_suffix }}"
 
-- name: Prepend 'systemd-' to user input
+- name: Prepend 'systemd-' to network
   ansible.builtin.set_fact:
     timeseer_reverse_proxy_network: "systemd-{{ timeseer_reverse_proxy_network }}"
 
