@@ -16,7 +16,11 @@ Environment=RUST_LOG=info
 PodmanArgs=--log-opt tag={{ timeseer_data_service_journal_tag }}
 Pull={{ timeseer_data_service_image_pull }}
 PodmanArgs=--tty
-PublishPort={{ timeseer_data_service_ports }}
+{% for port in timeseer_data_service_ports %}
+{% if port is not none and port != '' %}
+PublishPort={{ port }}
+{% endif %}
+{% endfor %}
 
 [Service]
 Restart=always
