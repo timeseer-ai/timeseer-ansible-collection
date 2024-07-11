@@ -12,11 +12,6 @@ This Ansible role is designed for setting up timeseer, a time-series data analys
 - podman installed on the target machine.
 - `community podman` Ansible collection.
 
-
-## Role Overview
-
-The `timeseer` role is primarily intended for deploying the Timeseer podman container. It is ideally suited for a limited Proof of Concept (POC) involving 1-2 users. This setup does not require authentication or a web server and can be run locally.
-
 ### Role Overview
 
 The `timeseer` role is primarily intended for deploying the Timeseer Podman container. It is ideally suited for a limited Proof of Concept (POC) involving 1-2 users. This setup does not require authentication or a web server and can be run locally.
