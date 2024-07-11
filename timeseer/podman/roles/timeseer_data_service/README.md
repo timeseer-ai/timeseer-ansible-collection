@@ -15,6 +15,24 @@ This Ansible role is designed to deploy and configure the Timeseer Data Service 
 
 The Timeseer data service is an optional component specifically designed to enhance performance for data services in fleet scenarios. This service operates independently and has its own dedicated configuration file.
 
+The role uses Quadlet files and natively integrates with systemd, so to start, stop, or restart the container, you will need to use `systemctl` commands. Here are the commands:
+
+- Start the container:
+  ```shell
+  sudo systemctl start timeseer-data-service
+  ```
+
+- Stop the container:
+  ```shell
+  sudo systemctl stop timeseer-data-service
+  ```
+
+- Restart the container:
+  ```shell
+  sudo systemctl restart timeseer-data-service
+  ```
+
+
 **Directory Configuration**
 Default Directory: The timeseer_data_service role creates a default directory at `/opt/timeseer/data-service`.
 
