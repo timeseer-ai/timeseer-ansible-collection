@@ -41,6 +41,10 @@
       - "{{ traefik_dir }}/traefik-timeseer.yml:/etc/traefik/traefik-timeseer.yml"
       - "{{ traefik_dir }}/{{ acme_or_certs }}:/etc/traefik/{{ acme_or_certs }}{{ ':z' if ansible_selinux.status == 'enabled' else '' }}"
 
+- name: Prepend 'systemd-' to network
+  ansible.builtin.set_fact:
+    traefik_network: "systemd-{{ traefik_network }}"
+
 - name: Template configuration files
   ansible.builtin.template:
     src: "{{ item.src }}"
@@ -51,36 +55,18 @@
       dest: "{{ traefik_dir }}/traefik.yml"
     - src: "traefik-timeseer.yml"
       dest: "{{ traefik_dir }}/traefik-timeseer.yml"
-    - src: "traefik-container.quadlet.j2"
-      dest: "/etc/containers/systemd/ts-traefik-proxy-container.container"
+    - src: "traefik-container.quadlet"
+      dest: "/etc/containers/systemd/traefik.container"
   register: traefik_config
-  notify:
-    - Signal daemon Restart for traefik
-    - Reload systemd daemon for traefik
-    - Restart traefik service
 
-- name: Run traefik  in a podman container
-  containers.podman.podman_container:
+- name: Reload systemd daemon to ensure traefik container is known
+  ansible.builtin.systemd:
+    daemon_reload: true
+  when: traefik_config.changed # noqa: no-handler
+
+- name: Check if traefik service is enabled
+  ansible.builtin.systemd:
     name: traefik
-    image: "{{ traefik_image }}"
-    state: quadlet
-    network_mode: "{{ traefik_network }}"
-    ports: "{{ ports_list }}"
-    volumes: "{{ traefik_volume_list }}"
-    log_driver: journald
-    log_options:
-      tag: "{{ traefik_journal_tag }}"
-    tty: true
-
-- name: Flush traefik Handlers to apply changes immediately
-  ansible.builtin.meta: flush_handlers
-
-- name: Enable timeseer-reverse-proxy-container service
-  ansible.builtin.systemd:
-    name: ts-traefik-proxy-container
     enabled: true
-
-- name: Start timeseer-reverse-proxy-container service
-  ansible.builtin.systemd:
-    name: ts-traefik-proxy-container
     state: started
+  register: traefik_status

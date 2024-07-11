@@ -24,45 +24,31 @@
     ds_custom_toml_volume:
       - "{{ timeseer_data_service_config_dir }}:/usr/src/app/Timeseer-data-service.toml"
 
-- name: Create ts-data-service quadlet container
-  containers.podman.podman_container:
-    name: timeseer-data-service
-    image: "{{ timeseer_data_service_image }}"
-    command: "/usr/bin/timeseer-data-service"
-    state: quadlet
-    pull: "{{ timeseer_data_service_image_pull }}"
-    network: "{{ timeseer_data_service_network }}"
-    volumes: "{{ data_service_volume_list }}"
-    log_driver: journald
-    log_options:
-      tag: "{{ timeseer_data_service_journal_tag }}"
-    env:
-      RUST_LOG: info
-    tty: true
-    ports: "{{ timeseer_data_service_ports }}"
-  when: timeseer_data_service_enable
+- name: Prepend 'systemd-' to network
+  ansible.builtin.set_fact:
+    timeseer_data_service_network: "systemd-{{ timeseer_data_service_network }}"
 
 - name: Template configuration files
   ansible.builtin.template:
     src: "{{ item }}"
-    dest: "/etc/containers/systemd/ts-data-service-container.container"
+    dest: "/etc/containers/systemd/timeseer-data-service.container"
     mode: "0644"
   loop:
-    - "timeseer-data-service-container.quadlet.j2"
-  register: timeseer_data_j2
+    - "timeseer-data-service-container.quadlet"
+  register: timeseer_data_service_container
   notify:
-    - Signal daemon Restart for timeseer-data-service
-    - Reload systemd daemon for timeseer-data-service
+    - Restart timeseer-data-service service
+  when: timeseer_data_service_enable
 
-- name: Flush  timeseer-data-service Handlers to apply changes immediately
-  ansible.builtin.meta: flush_handlers
-
-- name: Enable timeseer-data-service-container service
+- name: Reload systemd daemon to ensure timeseer-data-service container is known
   ansible.builtin.systemd:
-    name: ts-data-service-container
+    daemon_reload: true
+  when: timeseer_data_service_container.changed and timeseer_data_service_enable # noqa: no-handler
+
+- name: Check if timeseer data service is enabled
+  ansible.builtin.systemd:
+    name: timeseer-data-service
     enabled: true
-
-- name: Start timeseer-data-service-container service
-  ansible.builtin.systemd:
-    name: ts-data-service-container
     state: started
+  register: timeseer_data_service_status
+  when: timeseer_data_service_enable

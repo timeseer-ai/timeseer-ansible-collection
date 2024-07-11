@@ -7,7 +7,7 @@ ContainerName=timeseer-reverse-proxy
 EnvironmentFile=/opt/timeseer/reverse-proxy/env
 Exec=/usr/bin/timeseer-reverse-proxy --config-file /usr/src/app/Timeseer-reverse-proxy.toml
 Image={{ timeseer_reverse_proxy_image }}
-Network=timeseer
+Network={{ timeseer_reverse_proxy_network }}
 LogDriver=journald
 PublishPort={{ timeseer_reverse_proxy_ports }}
 Pull={{ timeseer_reverse_proxy_image_pull }}
@@ -22,5 +22,3 @@ Restart=always
 
 [Install]
 WantedBy=network-online.target
-
-

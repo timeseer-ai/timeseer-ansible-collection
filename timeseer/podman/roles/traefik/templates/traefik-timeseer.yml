@@ -74,6 +74,3 @@ tls:
     - certFile: "/etc/traefik/certs/{{ traefik_cert_file_name }}"
       keyFile: "/etc/traefik/certs/{{ traefik_key_file_name }}"
 {% endif %}
-
-
-

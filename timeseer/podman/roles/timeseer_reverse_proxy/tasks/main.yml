@@ -23,44 +23,29 @@
     custom_toml_volume:
       - "{{ config_dir }}:/usr/src/app/proxy-config{{ selinux_suffix }}"
 
-- name: Create a Timeseer Reverse Proxy quadlet file
-  containers.podman.podman_container:
-    name: timeseer-reverse-proxy
-    image: "{{ timeseer_reverse_proxy_image }}"
-    command: "/usr/bin/timeseer-reverse-proxy --config-file /usr/src/app/Timeseer-reverse-proxy.toml"
-    state: quadlet
-    pull: "{{ timeseer_reverse_proxy_image_pull }}"
-    network: "{{ timeseer_reverse_proxy_network }}"
-    volumes: "{{ reverse_proxy_volume_list }}"
-    log_driver: journald
-    log_options:
-      tag: "{{ timeseer_reverse_proxy_journal_tag }}"
-    env_file: "{{ timeseer_reverse_proxy_dir }}/env"
-    tty: true
-    ports: "{{ timeseer_reverse_proxy_ports if timeseer_reverse_proxy_ports and timeseer_reverse_proxy_ports != '' else omit }}"
+- name: Prepend 'systemd-' to user input
+  ansible.builtin.set_fact:
+    timeseer_reverse_proxy_network: "systemd-{{ timeseer_reverse_proxy_network }}"
 
 - name: Template configuration files
   ansible.builtin.template:
     src: "{{ item }}"
-    dest: "/etc/containers/systemd/ts-reverse-proxy-container.container"
+    dest: "/etc/containers/systemd/timeseer-reverse-proxy.container"
     mode: "0644"
   loop:
-    - "timeseer-reverse-proxy-container.quadlet.j2"
-  register: timeseer_proxy_j2
+    - "timeseer-reverse-proxy-container.quadlet"
+  register: timeseer_reverse_proxy_container
   notify:
-    - Signal daemon Restart for timeseer-reverse-proxy
-    - Reload systemd daemon for timeseer-reverse-proxy
-    - Restart timeseer-reverse-proxy
+    - Restart timeseer-reverse-proxy service
 
-- name: Flush  timeseer-reverse-proxy Handlers to apply changes immediately
-  ansible.builtin.meta: flush_handlers
-
-- name: Enable timeseer-reverse-proxy-container service
+- name: Reload systemd daemon to ensure timeseer-reverse-proxy container is known
   ansible.builtin.systemd:
-    name: ts-reverse-proxy-container
+    daemon_reload: true
+  when: timeseer_reverse_proxy_container.changed # noqa: no-handler
+
+- name: Check if timeseer data service is enabled
+  ansible.builtin.systemd:
+    name: timeseer-reverse-proxy
     enabled: true
-
-- name: Start timeseer-reverse-proxy-container service
-  ansible.builtin.systemd:
-    name: ts-reverse-proxy-container
     state: started
+  register: timeseer_reverse_proxy_status
