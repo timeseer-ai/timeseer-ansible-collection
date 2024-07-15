@@ -5,7 +5,7 @@ After=network.target
 [Container]
 ContainerName=traefik
 Image={{ traefik_image }}
-Network={{ traefik_network }}
+Network={{ traefik_network }}.network
 {% for port in ports_list %}
 PublishPort={{ port }}
 {% endfor %}

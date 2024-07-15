@@ -7,7 +7,7 @@ After=network.target
 ContainerName=timeseer-data-service
 Image={{ timeseer_data_service_image }}
 Exec=/usr/bin/timeseer-data-service
-Network={{ timeseer_data_service_network }}
+Network={{ timeseer_data_service_network }}.network
 {% for volume in data_service_volume_list %}
 Volume={{ volume }}
 {% endfor %}

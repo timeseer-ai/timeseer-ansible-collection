@@ -41,10 +41,6 @@
       - "{{ traefik_dir }}/traefik-timeseer.yml:/etc/traefik/traefik-timeseer.yml"
       - "{{ traefik_dir }}/{{ acme_or_certs }}:/etc/traefik/{{ acme_or_certs }}{{ ':z' if ansible_selinux.status == 'enabled' else '' }}"
 
-- name: Prepend 'systemd-' to network
-  ansible.builtin.set_fact:
-    traefik_network: "systemd-{{ traefik_network }}"
-
 - name: Template Traefik configuration files
   ansible.builtin.template:
     src: "{{ item.src }}"

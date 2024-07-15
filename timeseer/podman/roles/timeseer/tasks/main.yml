@@ -52,7 +52,7 @@
 - name: Template configuration for timeseer.network
   ansible.builtin.template:
     src: "timeseer.network"
-    dest: "/etc/containers/systemd/timeseer.network"
+    dest: "/etc/containers/systemd/{{ timeseer_network }}.network"
     mode: "0644"
 
 - name: Template configuration for timeseer-container.quadlet

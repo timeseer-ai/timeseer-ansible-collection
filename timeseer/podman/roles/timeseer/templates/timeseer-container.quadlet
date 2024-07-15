@@ -6,7 +6,7 @@ After=network.target
 ContainerName=timeseer
 Image={{ timeseer_image }}
 User=1001
-Network=timeseer.network
+Network={{ timeseer_network }}.network
 {% for volume in timeseer_volume_list %}
 Volume={{ volume }}
 {% endfor %}
