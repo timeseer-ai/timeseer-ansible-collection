@@ -119,10 +119,11 @@ To configure port mapping in your Ansible playbook, use the `timeseer_ports` var
 
 #### Example Configuration
 
-For example, if you want to access Timeseer at `localhost:8080`, and Timeseer inside the podman container is configured to listen on port 8080, you would set the `timeseer_ports` variable as follows:
+For example, if you want to access Timeseer at `localhost:8080`, and Timeseer inside the Podman container is configured to listen on port 8080, you would set the `timeseer_ports` variable as follows:
 
 ```yaml
-timeseer_ports: "8080:8080"
+timeseer_ports:
+  - "8080:8080"
 ```
 
 This configuration maps port 8080 of the host to port 8080 of the podman container, enabling access to the Timeseer interface by navigating to `http://localhost:8080`.
