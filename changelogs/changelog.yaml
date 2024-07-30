@@ -41,3 +41,10 @@ releases:
 
       Key Features:
         - Introduced the `data-service role` for both Podman and Docker.
+  1.0.4:
+    release_date: "2024-07-30"
+    changes:
+      release_summary: |
+        1.0.4 introduces support for managing Podman containers via Quadlet under systemd services
+      Key Features:
+        - Quadlet Integration: Manage Podman containers as systemd services using Quadlet.
