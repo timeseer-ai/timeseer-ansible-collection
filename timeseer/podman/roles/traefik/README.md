@@ -24,6 +24,24 @@ Note that Timeseer does not provide support for Traefik.
 
 This role is provided for convenience.
 
+The role uses Quadlet files and natively integrates with systemd, so to start, stop, or restart the container, you will need to use `systemctl` commands. Here are the commands:
+
+- Start the container:
+  ```shell
+  sudo systemctl start traefik
+  ```
+
+- Stop the container:
+  ```shell
+  sudo systemctl stop traefik
+  ```
+
+- Restart the container:
+  ```shell
+  sudo systemctl restart traefik
+  ```
+
+
 Import the role using the following YAML:
 ```yaml
 - name: Import Timeseer podman role  Traefik

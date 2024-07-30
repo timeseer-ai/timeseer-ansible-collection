@@ -59,8 +59,8 @@ argument_specs:
       timeseer_ports:
         description:
           - "Custom port mapping for the timeseer container. Format should match podman's port mapping format, e.g., '8080:8080'."
-        type: str
-        default: ""
+        type: list
+        default: []
 
       timeseer_image_pull:
         description: Specifies when to pull the container image for the Timeseer data service, allowing control over the image version used.

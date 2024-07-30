@@ -1,0 +1,5 @@
+- name: Restart timeseer-reverse-proxy service
+  ansible.builtin.systemd:
+    name: timeseer-reverse-proxy
+    state: restarted
+  when: timeseer_reverse_proxy_status  is not changed

@@ -1,0 +1,5 @@
+- name: Restart timeseer service
+  ansible.builtin.systemd:
+    name: timeseer
+    state: restarted
+  when: timeseer_service_status  is not changed

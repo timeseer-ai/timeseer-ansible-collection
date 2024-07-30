@@ -1,0 +1,46 @@
+- name: Prepare a storage directory for timeseer-data-service
+  ansible.builtin.file:
+    path: "{{ timeseer_data_service_dir }}"
+    state: directory
+    owner: 1001
+    mode: "0755"
+
+- name: Set storage path to podman volume
+  ansible.builtin.set_fact:
+    timeseer_data_service_storage_mount: "{{ timeseer_data_service_podman_volume }}"
+  when: timeseer_data_service_podman_volume | default('') | trim != ''
+
+- name: Set storage path to timeseer default storage_path
+  ansible.builtin.set_fact:
+    timeseer_data_service_storage_mount: "{{ timeseer_data_service_dir }}"
+  when: timeseer_data_service_podman_volume | default('') | trim == ''
+
+- name: Define timeseer-data-service volume list
+  ansible.builtin.set_fact:
+    data_service_volume_list: "{{ ds_base_volumes + (ds_custom_toml_volume if timeseer_data_service_config_dir | default('') | trim != '' else []) }}"
+  vars:
+    ds_base_volumes:
+      - "{{ timeseer_data_service_storage_mount }}:/usr/src/app/data-service"
+    ds_custom_toml_volume:
+      - "{{ timeseer_data_service_config_dir }}:/usr/src/app/Timeseer-data-service.toml"
+
+- name: Template Timeseer data service configuration file
+  ansible.builtin.template:
+    src: "timeseer-data-service-container.quadlet"
+    dest: "/etc/containers/systemd/timeseer-data-service.container"
+    mode: "0644"
+  register: timeseer_data_service_container
+  notify:
+    - Restart timeseer-data-service service
+
+- name: Reload systemd daemon to ensure timeseer-data-service container is known
+  ansible.builtin.systemd:
+    daemon_reload: true
+  when: timeseer_data_service_container.changed # noqa: no-handler
+
+- name: Start and Enable Timeseer-data-service
+  ansible.builtin.systemd:
+    name: timeseer-data-service
+    enabled: true
+    state: started
+  register: timeseer_data_service_status

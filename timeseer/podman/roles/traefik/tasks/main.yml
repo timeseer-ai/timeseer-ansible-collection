@@ -23,41 +23,52 @@
     mode: "0755"
     state: directory
 
-- name: Template configuration files
-  ansible.builtin.template:
-    src: "{{ item }}"
-    dest: "{{ traefik_dir }}/{{ item }}"
-    mode: "0644"
-  loop:
-    - "traefik.yml"
-    - "traefik-timeseer.yml"
-  register: traefik_config
-  notify:
-    - Signal Traefik Restart
-    - Restart Traefik
-
-- name: Run traefik  in a podman container
-  containers.podman.podman_container:
-    name: traefik
-    image: "{{ traefik_image }}"
-    state: started
-    recreate: "{{ traefik_recreate_container }}"
-    restart_policy: unless-stopped
-    network_mode: "{{ traefik_network }}"
-    ports:
+- name: Set ports configuration
+  ansible.builtin.set_fact:
+    ports_list:
       - "80:80"
       - "443:443"
       - "8443:8443"
-    volumes:
-      - "{{ traefik_yml_path }}"
-      - "{{ timeseer_yml_path }}"
-      - "{{ acme_or_certs_path }}"
-  vars:
-    traefik_yml_path: "{{ traefik_dir }}/traefik.yml:/etc/traefik/traefik.yml"
-    timeseer_yml_path: "{{ traefik_dir }}/traefik-timeseer.yml:/etc/traefik/traefik-timeseer.yml"
+
+- name: Define traefik_tls
+  ansible.builtin.set_fact:
     acme_or_certs: "{{ 'acme' if traefik_tls == 'acme' else 'certs' }}"
-    acme_or_certs_path: "{{ traefik_dir }}/{{ acme_or_certs }}:/etc/traefik/{{ acme_or_certs }}{{ ':z' if ansible_selinux.status == 'enabled' else '' }}"
-    log_driver: journald
-    log_options:
-      tag: "{{ traefik_journal_tag }}"
-    tty: true
+
+- name: Define traefik volume list
+  ansible.builtin.set_fact:
+    traefik_volume_list:
+      - "{{ traefik_dir }}/traefik.yml:/etc/traefik/traefik.yml"
+      - "{{ traefik_dir }}/traefik-timeseer.yml:/etc/traefik/traefik-timeseer.yml"
+      - "{{ traefik_dir }}/{{ acme_or_certs }}:/etc/traefik/{{ acme_or_certs }}{{ ':z' if ansible_selinux.status == 'enabled' else '' }}"
+
+- name: Template Traefik configuration files
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "0644"
+  loop:
+    - src: "traefik.yml"
+      dest: "{{ traefik_dir }}/traefik.yml"
+    - src: "traefik-timeseer.yml"
+      dest: "{{ traefik_dir }}/traefik-timeseer.yml"
+  notify:
+    - Restart traefik
+
+- name: Template Traefik container file
+  ansible.builtin.template:
+    src: "traefik-container.quadlet"
+    dest: "/etc/containers/systemd/traefik.container"
+    mode: "0644"
+  register: traefik_container_config
+
+- name: Reload systemd daemon to ensure traefik container is known
+  ansible.builtin.systemd:
+    daemon_reload: true
+  when: traefik_container_config.changed # noqa: no-handler
+
+- name: Start and Enable traefik
+  ansible.builtin.systemd:
+    name: traefik
+    enabled: true
+    state: started
+  register: traefik_status

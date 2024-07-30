@@ -3,7 +3,7 @@ timeseer_db_dir: /opt/timeseer
 timeseer_podman_volume: ""
 timeseer_image: container.timeseer.ai/timeseer
 timeseer_config_dir: ""
-timeseer_ports: ""
+timeseer_ports: []
 timeseer_network: timeseer
 timeseer_journal_tag: "TIMESEER"
 timeseer_download_demo_data: false

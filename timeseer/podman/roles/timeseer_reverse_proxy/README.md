@@ -17,6 +17,23 @@ This Ansible role facilitates the setup and configuration of Timeseer and its re
 
 When a more robust setup is desired, deploying the `timeseer_reverse_proxy` role is recommended. By default, Timeseer includes a reverse proxy that is facilitated through another Timeseer container.
 
+The role uses Quadlet files and natively integrates with systemd, so to start, stop, or restart the container, you will need to use `systemctl` commands. Here are the commands:
+
+- Start the container:
+  ```shell
+  sudo systemctl start timeseer-reverse-proxy
+  ```
+
+- Stop the container:
+  ```shell
+  sudo systemctl stop timeseer-reverse-proxy
+  ```
+
+- Restart the container:
+  ```shell
+  sudo systemctl restart timeseer-reverse-proxy
+  ```
+
 ### Directory Configuration
 - **Default Directory**: The `timeseer_reverse_proxy` role creates a default directory at `/opt/timeseer/reverse-proxy`.
 - **Customization**: To change the directory to one of your preference, modify the `timeseer_reverse_proxy_dir` variable in your Ansible playbook.
@@ -46,8 +63,11 @@ Here's how to add configuration files  to Timeseer reverse proxy with  `ansible.
 Add the following handler to your playbook to manage file changes with a restart:
 
 ```yaml
-- name: Restart Timeseer Reverse Proxy
-  ansible.builtin.command: podman restart timeseer-reverse-proxy
+    - name: Restart Timeseer Reverse Proxy
+      ansible.builtin.systemd:
+        name: timeseer-reverse-proxy
+        state: restarted
+        daemon_reload: false
 ```
 
 ### Example TOML Configuration
@@ -122,10 +142,17 @@ host = "0.0.0.0"
 
   handlers:
     - name: Restart Timeseer
-      ansible.builtin.command: podman restart timeseer
+      ansible.builtin.systemd:
+        name: timeseer
+        state: restarted
+        daemon_reload: false
 
     - name: Restart Timeseer Reverse Proxy
-      ansible.builtin.command: podman restart timeseer-reverse-proxy
+      ansible.builtin.systemd:
+        name: timeseer-reverse-proxy
+        state: restarted
+        daemon_reload: false
+
 
 ```
 

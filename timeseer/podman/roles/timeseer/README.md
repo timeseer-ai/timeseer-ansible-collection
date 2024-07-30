@@ -12,10 +12,26 @@ This Ansible role is designed for setting up timeseer, a time-series data analys
 - podman installed on the target machine.
 - `community podman` Ansible collection.
 
+### Role Overview
 
-## Role Overview
+The `timeseer` role is primarily intended for deploying the Timeseer Podman container. It is ideally suited for a limited Proof of Concept (POC) involving 1-2 users. This setup does not require authentication or a web server and can be run locally.
 
-The `timeseer` role is primarily intended for deploying the Timeseer podman container. It is ideally suited for a limited Proof of Concept (POC) involving 1-2 users. This setup does not require authentication or a web server and can be run locally.
+The role uses Quadlet files and natively integrates with systemd, so to start, stop, or restart the container, you will need to use `systemctl` commands. Here are the commands:
+
+- Start the container:
+  ```shell
+  sudo systemctl start timeseer
+  ```
+
+- Stop the container:
+  ```shell
+  sudo systemctl stop timeseer
+  ```
+
+- Restart the container:
+  ```shell
+  sudo systemctl restart timeseer
+  ```
 
 ### Installation Directory
 
@@ -54,8 +70,11 @@ This YAML snippet demonstrates how to configure and restart Timeseer using `ansi
 #### Handler for Restarting Timeseer
 
 ```yaml
-- name: Restart Timeseer
-  ansible.builtin.command: podman restart timeseer
+ - name: Restart Timeseer
+      ansible.builtin.systemd:
+        name: timeseer
+        state: restarted
+        daemon_reload: false
 ```
 
 #### TOML Configuration Example
@@ -100,10 +119,11 @@ To configure port mapping in your Ansible playbook, use the `timeseer_ports` var
 
 #### Example Configuration
 
-For example, if you want to access Timeseer at `localhost:8080`, and Timeseer inside the podman container is configured to listen on port 8080, you would set the `timeseer_ports` variable as follows:
+For example, if you want to access Timeseer at `localhost:8080`, and Timeseer inside the Podman container is configured to listen on port 8080, you would set the `timeseer_ports` variable as follows:
 
 ```yaml
-timeseer_ports: "8080:8080"
+timeseer_ports:
+  - "8080:8080"
 ```
 
 This configuration maps port 8080 of the host to port 8080 of the podman container, enabling access to the Timeseer interface by navigating to `http://localhost:8080`.
@@ -139,7 +159,11 @@ This YAML example sets up the Timeseer environment and maps necessary ports:
 
   handlers:
     - name: Restart Timeseer
-      ansible.builtin.command: podman restart timeseer
+      ansible.builtin.systemd:
+        name: timeseer
+        state: restarted
+        daemon_reload: false
+
 
 ```
 
@@ -158,7 +182,7 @@ Here are the variables used in this role, complete with their default values fou
 - `timeseer_image`: podman image for Timeseer. (default: `"container.timeseer.ai/timeseer"`)
 - `timeseer_download_demo_data`: Whether to download demo data for Timeseer. (default: `false`)
 - `timeseer_config_dir`: Optional directory for custom Timeseer configurations. (default: `""`)
-- `timeseer_ports`: Custom port mapping for the Timeseer container. This should be specified in the podman port mapping format (e.g., `"8080:8080"`). (default: `""`)
+- `timeseer_ports`: Custom port mapping for the Timeseer container. This should be specified in the podman port mapping format as a list (e.g., `- "8080:8080"`). (default: `[]`)
 - `timeseer_journal_tag`: Tag for journal logging. (default: `"TIMESEER"`)
 - `timeseer_image_pull`: (default: `newer`): Controls when to pull the container image, with options "missing", "always", "never", or "newer". 
   - "missing": Pulls image if not present locally.

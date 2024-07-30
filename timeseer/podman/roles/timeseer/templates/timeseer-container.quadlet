@@ -1,0 +1,27 @@
+[Unit]
+Wants=network.target
+After=network.target
+
+[Container]
+ContainerName=timeseer
+Image={{ timeseer_image }}
+User=1001
+Network={{ timeseer_network }}.network
+{% for volume in timeseer_volume_list %}
+Volume={{ volume }}
+{% endfor %}
+{% for port in timeseer_ports %}
+PublishPort={{ port }}
+{% endfor %}
+LogDriver=journald
+Pull={{ timeseer_image_pull }}
+PodmanArgs=--log-opt tag={{ timeseer_journal_tag }}
+PodmanArgs=--tty
+
+[Service]
+Restart=always
+TimeoutStartSec=300  # Increase the start timeout to 300 seconds
+TimeoutStopSec=300   # Increase the stop timeout to 300 seconds
+
+[Install]
+WantedBy=network-online.target

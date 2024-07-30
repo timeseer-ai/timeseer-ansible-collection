@@ -23,9 +23,15 @@
     timeseer_storage_mount: "{{ timeseer_db_dir }}/db"
   when: timeseer_podman_volume | default('') | trim == ''
 
-- name: Create a podman network
-  containers.podman.podman_network:
-    name: "{{ timeseer_network }}"
+- name: Define timeseer volume list
+  ansible.builtin.set_fact:
+    timeseer_volume_list: "{{ timeseer_base_volumes + (timeseer_custom_toml_volume if timeseer_config_dir | default('') | trim != '' else []) }}"
+  vars:
+    timeseer_base_volumes:
+      - "{{ timeseer_dir }}/data:/usr/src/app/data"
+      - "{{ timeseer_storage_mount }}:/usr/src/app/db{{ ':z' if ansible_selinux['status'] == 'enabled' else '' }}"
+    timeseer_custom_toml_volume:
+      - "{{ timeseer_config_dir }}:/usr/src/app/config/:ro"
 
 - name: Download demo data
   containers.podman.podman_container:
@@ -43,25 +49,28 @@
     tty: true
   when: timeseer_download_demo_data
 
-- name: Run Timeseer in a podman container
-  containers.podman.podman_container:
+- name: Template configuration for timeseer.network
+  ansible.builtin.template:
+    src: "timeseer.network"
+    dest: "/etc/containers/systemd/{{ timeseer_network }}.network"
+    mode: "0644"
+
+- name: Template configuration for timeseer-container.quadlet
+  ansible.builtin.template:
+    src: "timeseer-container.quadlet"
+    dest: "/etc/containers/systemd/timeseer.container"
+    mode: "0644"
+  register: timeseer_container
+  notify: Restart timeseer service
+
+- name: Reload systemd daemon to ensure timeseer container is known
+  ansible.builtin.systemd:
+    daemon_reload: true
+  when: timeseer_container.changed # noqa: no-handler
+
+- name: Start and Enable Timeseer
+  ansible.builtin.systemd:
     name: timeseer
-    image: "{{ timeseer_image }}"
+    enabled: true
     state: started
-    pull: "{{ timeseer_image_pull }}"
-    restart_policy: unless-stopped
-    network: "{{ timeseer_network }}"
-    volumes: "{{ volume_list }}"
-    log_driver: journald
-    user: "1001"
-    log_options:
-      tag: "{{ timeseer_journal_tag }}"
-    tty: true
-    ports: "{{ timeseer_ports if timeseer_ports and timeseer_ports != '' else omit }}"
-  vars:
-    base_volumes:
-      - "{{ timeseer_dir }}/data:/usr/src/app/data"
-      - "{{ timeseer_storage_mount }}:/usr/src/app/db{{ ':z' if ansible_selinux['status'] == 'enabled' else '' }}"
-    custom_toml_volume:
-      - "{{ timeseer_config_dir }}:/usr/src/app/config/:ro"
-    volume_list: "{{ base_volumes + (custom_toml_volume if timeseer_config_dir | default('') | trim != '' else []) }}"
+  register: timeseer_service_status
