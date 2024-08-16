@@ -48,3 +48,10 @@ releases:
         1.0.4 introduces support for managing Podman containers via Quadlet under systemd services
       Key Features:
         - Quadlet Integration: Manage Podman containers as systemd services using Quadlet.
+  1.0.5:
+    release_date: "2024-08-16"
+    changes:
+      release_summary: |
+        Update Traefik to 3.0.1
+      Key Features:
+        - Please see https://github.com/traefik/traefik/releases/tag/v3.1.0?ref=traefik.io
