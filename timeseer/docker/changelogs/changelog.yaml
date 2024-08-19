@@ -52,6 +52,13 @@ releases:
     release_date: "2024-08-16"
     changes:
       release_summary: |
-        Update Traefik to 3.0.1
+        Updated Traefik to 3.0.1
+      Key Features:
+        - Please see https://github.com/traefik/traefik/releases/tag/v3.1.0?ref=traefik.io
+  1.0.6:
+    release_date: "2024-08-16"
+    changes:
+      release_summary: |
+        Fix on the Traefik version
       Key Features:
         - Please see https://github.com/traefik/traefik/releases/tag/v3.1.0?ref=traefik.io
