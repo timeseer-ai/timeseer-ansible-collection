@@ -1,5 +1,5 @@
 traefik_dir: "/opt/timeseer/traefik"
-traefik_image: "traefik:v3.1.0"
+traefik_image: "traefik:v3.1"
 traefik_network: timeseer
 traefik_journal_tag: "TRAEFIK"
 traefik_host: "localhost"
