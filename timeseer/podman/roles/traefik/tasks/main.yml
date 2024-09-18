@@ -28,7 +28,6 @@
     ports_list:
       - "80:80"
       - "443:443"
-      - "8443:8443"
 
 - name: Define traefik_tls
   ansible.builtin.set_fact:

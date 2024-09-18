@@ -22,7 +22,7 @@ entryPoints:
     address: ":443"
 {% if traefik_expose_flight %}
   flight:
-    address: ":8443"
+    address: ":443"
 {% endif %}
 
 
@@ -34,4 +34,4 @@ certificatesResolvers:
       storage: "/etc/traefik/acme/acme.json"
       httpChallenge:
         entryPoint: http
-{% endif %}        
+{% endif %}

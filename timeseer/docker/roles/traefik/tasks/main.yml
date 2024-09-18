@@ -48,7 +48,6 @@
     ports:
       - "80:80"
       - "443:443"
-      - "8443:8443"
     volumes:
       - "{{ traefik_yml_path }}"
       - "{{ timeseer_yml_path }}"
