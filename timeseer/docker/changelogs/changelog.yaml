@@ -62,3 +62,10 @@ releases:
         Fix on the Traefik version
       Key Features:
         - Please see https://github.com/traefik/traefik/releases/tag/v3.1.0?ref=traefik.io
+  1.0.7:
+    release_date: "2024-09-19"
+    changes:
+      release_summary: |
+        Fixed an issue with port configuration logic for Traefik.
+      Key Features:
+        - Ports are now correctly configured, with port 8443 being conditionally included when `traefik_expose_flight` is enabled.
