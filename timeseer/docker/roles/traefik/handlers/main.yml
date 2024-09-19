@@ -15,10 +15,7 @@
     recreate: "{{ traefik_recreate_container }}"
     restart_policy: unless-stopped
     network_mode: "{{ traefik_network }}"
-    ports:
-      - "80:80"
-      - "443:443"
-      - "8443:8443"
+    ports: "{{ ports_list }}"
     volumes:
       - "{{ traefik_yml_path }}"
       - "{{ timeseer_yml_path }}"

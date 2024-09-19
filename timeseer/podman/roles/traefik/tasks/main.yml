@@ -23,16 +23,16 @@
     mode: "0755"
     state: directory
 
-- name: Set ports configuration
+- name: Set default ports configuration
   ansible.builtin.set_fact:
-    ports_list:
-      - "80:80"
-      - "443:443"
-
-- name: Add port 8443 when traefik_expose_flight is enabled
-  ansible.builtin.set_fact:
-    ports_list: "{{ ports_list + ['8443:8443'] }}"
-  when: traefik_expose_flight
+    ports_list: >
+      {{
+        [
+          "80:80",
+          "443:443"
+        ]
+        + (["8443:8443"] if traefik_expose_flight else [])
+      }}
 
 - name: Define traefik_tls
   ansible.builtin.set_fact:
