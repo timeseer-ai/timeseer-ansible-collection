@@ -32,7 +32,7 @@
 - name: Add port 8443 when traefik_expose_flight is enabled
   ansible.builtin.set_fact:
     ports_list: "{{ ports_list + ['8443:8443'] }}"
-  when: traefik_expose_flight == true
+  when: traefik_expose_flight
 
 - name: Template configuration files
   ansible.builtin.template:
