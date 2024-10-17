@@ -6,16 +6,16 @@ This repository contains the Ansible roles for configuring and managing the time
 
 ## Roles
 
-- **timeseer**: Sets up Timeseer in podman, handling storage preparation,podman volumes, and deployment.  
+- **timeseer**: Sets up Timeseer in podman, handling storage preparation,podman volumes, and deployment.
   [![Ansible Galaxy](https://img.shields.io/badge/podman-timeseer-yellow.svg)](https://github.com/timeseer-ai/timeseer-ansible-collection/tree/master/timeseer/podman/roles/timeseer)
 
-- **timeseer_reverse_proxy**: Configures Timeseer and its reverse proxy in podman, including storage, podman containers, and proxy setup.  
+- **timeseer_reverse_proxy**: Configures Timeseer and its reverse proxy in podman, including storage, podman containers, and proxy setup.
   [![Ansible Galaxy](https://img.shields.io/badge/podman-timeseer_reverse_proxy-yellow.svg)](https://github.com/timeseer-ai/timeseer-ansible-collection/tree/master/timeseer/podman/roles/timeseer_reverse_proxy)
 
-- **timeseer_traefik**: Deploys Traefik as a reverse proxy and load balancer in podman, focusing on SSL/TLS with Let's Encrypt.  
+- **timeseer_traefik**: Deploys Traefik as a reverse proxy and load balancer in podman, focusing on SSL/TLS with Let's Encrypt.
   [![Ansible Galaxy](https://img.shields.io/badge/podman-timeseer_traefik-yellow.svg)](https://github.com/timeseer-ai/timeseer-ansible-collection/tree/master/timeseer/podman/roles/traefik)
 
-- **timeseer_data_service**: Deploys timeseer_data_service ,handling storage preparation,podman volumes, and deployment.  
+- **timeseer_data_service**: Deploys timeseer_data_service ,handling storage preparation,podman volumes, and deployment.
   [![Ansible Galaxy](https://img.shields.io/badge/podman-timeseer_data_service-yellow.svg)](https://github.com/timeseer-ai/timeseer-ansible-collection/tree/master/timeseer/podman/roles/timeseer_data_service)
 
 ---
