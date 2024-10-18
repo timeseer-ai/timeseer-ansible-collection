@@ -4,7 +4,7 @@
   with_items: "{{ traefik_config.results }}"
   when: item is changed
   loop_control:
-    label: "{{ item.dest }}"
+    label: "{{ item.invocation.dest }}"
 
 - name: Restart Traefik
   community.docker.docker_container:
