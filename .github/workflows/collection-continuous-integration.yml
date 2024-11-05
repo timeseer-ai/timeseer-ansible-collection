@@ -10,7 +10,7 @@ on:
 jobs:
   lint:
     name: Ansible Lint
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         ansible-version:
@@ -44,7 +44,7 @@ jobs:
 
   build:
     name: Build timeseer collection
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         ansible-version:
