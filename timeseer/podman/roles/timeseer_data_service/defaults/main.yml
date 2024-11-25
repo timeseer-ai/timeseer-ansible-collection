@@ -2,7 +2,6 @@
 timeseer_data_service_dir: "/opt/timeseer/data-service"
 timeseer_data_service_podman_volume: ""
 timeseer_data_service_config_dir: ""
-timeseer_data_service_enable: true
 timeseer_data_service_image: "container.timeseer.ai/timeseer"
 timeseer_data_service_ports: []
 timeseer_data_service_network: timeseer
