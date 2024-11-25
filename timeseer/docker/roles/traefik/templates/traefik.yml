@@ -11,6 +11,7 @@ providers:
     filename: "/etc/traefik/traefik-timeseer.yml"
 
 entryPoints:
+{% if traefik_tls_enable %}
   http:
     address: ":80"
     http:
@@ -20,11 +21,16 @@ entryPoints:
           scheme: https
   https:
     address: ":443"
+{% else %}
+  http:
+    address: ":80"
+{% endif %}
 {% if traefik_expose_flight %}
   flight:
     address: ":8443"
 {% endif %}
 
+{% if traefik_tls_enable and traefik_tls == "acme" %}
 certificatesResolvers:
   timeseer-le:
     acme:
@@ -32,3 +38,4 @@ certificatesResolvers:
       storage: "/etc/traefik/acme/acme.json"
       httpChallenge:
         entryPoint: http
+{% endif %}
