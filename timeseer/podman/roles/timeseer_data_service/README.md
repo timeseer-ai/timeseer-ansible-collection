@@ -75,7 +75,6 @@ Variables used in this role are listed below, along with default values (see `de
 - `timeseer_data_service_dir` (default: `"/opt/timeseer/data-service"`): The directory for the Timeseer Data Service.
 - `timeseer_data_service_podman_volume` (default:` ''`): Optional podman volume for Timeseer data service storage.
 - `timeseer_data_service_config_dir` (default:` ""`): Optional directory for TOML configuration files.
-- `timeseer_data_service_enable` (default: `false`): Boolean to enable or disable the data service.
 - `timeseer_data_service_image` (default: `"container.timeseer.ai/timeseer"`): podman image used for the Timeseer Data Service.
 - `timeseer_data_service_ports` (default: `[]`): Port mappings for the service. Modify using podman CLI syntax, such as
      - "3003:3000" (maps host port 3003 to container port 3000)

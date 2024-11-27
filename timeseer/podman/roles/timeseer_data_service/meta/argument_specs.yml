@@ -26,12 +26,6 @@ argument_specs:
         type: str
         default: ""
 
-      timeseer_data_service_enable:
-        description:
-          - Whether to enable the Timeseer data service.
-        type: bool
-        default: false
-
       timeseer_data_service_image:
         description:
           - The podman image to use for the Timeseer data service.

@@ -20,8 +20,10 @@ PodmanArgs=--tty
 
 [Service]
 Restart=always
-TimeoutStartSec=300  # Increase the start timeout to 300 seconds
-TimeoutStopSec=300   # Increase the stop timeout to 300 seconds
+# Increase the start timeout to 300 seconds
+TimeoutStartSec=300
+# Increase the stop timeout to 300 seconds
+TimeoutStopSec=300
 
 [Install]
 WantedBy=network-online.target

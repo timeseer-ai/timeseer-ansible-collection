@@ -68,6 +68,12 @@ argument_specs:
         type: bool
         default: false
 
+      traefik_tls_enable:
+        description:
+          - "Whether to manage TLS through Traefik."
+        type: bool
+        default: true
+
       traefik_tls:
         description:
           - Determines the method for obtaining SSL/TLS certificates. Use "ACME" to automatically obtain certificates using the ACME protocol.
