@@ -1,0 +1,31 @@
+---
+
+- name: Deploy Timeseer using Podman
+  hosts: tsai
+  become: true
+
+  tasks:
+
+    - name: Configure Timeseer
+      ansible.builtin.import_role:
+        name: ../timeseer/podman/roles/timeseer  # noqa: role-name
+
+    - name: Configure reverse proxy
+      ansible.builtin.copy:
+        content: |
+          [timeseer]
+          url = "http://timeseer:8080"
+        dest: "/opt/timeseer/reverse-proxy/timeseer.toml"
+        mode: "0644"
+
+    - name: Configure Timeseer
+      ansible.builtin.import_role:
+        name: ../timeseer/podman/roles/timeseer_reverse_proxy  # noqa: role-name
+
+    - name: Configure Traefik
+      ansible.builtin.import_role:
+        name: ../timeseer/podman/roles/traefik  # noqa: role-name
+      vars:
+        traefik_host: "{{ inventory_hostname }}"
+        traefik_tls_enable: false
+        traefik_timeseer_reverse_proxy_enable: true

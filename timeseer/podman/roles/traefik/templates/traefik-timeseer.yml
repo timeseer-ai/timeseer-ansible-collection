@@ -31,53 +31,69 @@ http:
   routers:
     timeseer:
       entryPoints:
+{% if traefik_tls_enable %}
       - "https"
+{% else %}
+      - "http"
+{% endif %}
+      rule: "Host(`{{ traefik_host }}`)"
 {% if traefik_basic_auth_enable %}
       middlewares:
       - "auth@file"
 {% endif %}
-{% if not traefik_timeseer_reverse_proxy_enable %}
-      service: timeseer
-{% else %}
+{% if traefik_timeseer_reverse_proxy_enable %}
       service: reverseProxy
+{% else %}
+      service: timeseer
 {% endif %}
-{% if traefik_tls == "acme" %}
-      rule: "Host(`{{ traefik_host }}`)"
-      tls:
-        certResolver: timeseer-le
-{% elif traefik_tls == "certs" %}
-      rule: "Host(`{{ traefik_host }}`)"
-      tls: {}
-{% endif %}
-{% if traefik_expose_flight and traefik_tls == "acme" %}
-    flight:
-      entryPoints:
-      - "flight"
-      service: flight
-      rule: "Host(`{{ traefik_host }}`)"
-      tls:
-        certResolver: timeseer-le
-{% elif traefik_expose_flight and traefik_tls == "certs" %}
-    flight:
-      entryPoints:
-      - "flight"
-      service: flight
-      rule: "Host(`{{ traefik_host }}`)"
-      tls: {}
-{% endif %}
-    timeseer-public-api:
-      entryPoints:
-        - "{% if traefik_tls == 'acme' or traefik_tls == 'certs' %}https{% else %}web{% endif %}"
-      service: "{% if not traefik_timeseer_reverse_proxy_enable %}timeseer{% else %}reverseProxy{% endif %}"
-      rule: "Host(`{{ traefik_host }}`) && PathPrefix(`/public/api`)"
+{% if traefik_tls_enable %}
 {% if traefik_tls == "acme" %}
       tls:
         certResolver: timeseer-le
 {% elif traefik_tls == "certs" %}
       tls: {}
+{% endif %}
 {% endif %}
 
-{% if traefik_tls == "certs" %}
+{% if traefik_expose_flight %}
+    flight:
+      entryPoints:
+      - "flight"
+      rule: "Host(`{{ traefik_host }}`)"
+      service: flight
+{% if traefik_tls_enable %}
+{% if traefik_tls == "acme" %}
+      tls:
+        certResolver: timeseer-le
+{% elif traefik_tls == "certs" %}
+      tls: {}
+{% endif %}
+{% endif %}
+{% endif %}
+
+    timeseer-public-api:
+      entryPoints:
+{% if traefik_tls_enable %}
+      - "https"
+{% else %}
+      - "http"
+{% endif %}
+      rule: "Host(`{{ traefik_host }}`) && PathPrefix(`/public/api`)"
+{% if traefik_timeseer_reverse_proxy_enable %}
+      service: reverseProxy
+{% else %}
+      service: timeseer
+{% endif %}
+{% if traefik_tls_enable %}
+{% if traefik_tls == "acme" %}
+      tls:
+        certResolver: timeseer-le
+{% elif traefik_tls == "certs" %}
+      tls: {}
+{% endif %}
+{% endif %}
+
+{% if traefik_tls_enable and traefik_tls == "certs" %}
 tls:
   certificates:
     - certFile: "/etc/traefik/certs/{{ traefik_cert_file_name }}"

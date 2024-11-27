@@ -12,6 +12,9 @@ PublishPort={{ port }}
 {% for volume in traefik_volume_list %}
 Volume={{ volume }}
 {% endfor %}
+{% if traefik_tls_volume is defined %}
+Volume={{ traefik_tls_volume }}
+{% endif %}
 PodmanArgs=--log-opt tag={{ traefik_journal_tag }}
 PodmanArgs=--tty
 
