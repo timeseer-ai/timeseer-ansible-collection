@@ -10,26 +10,11 @@
     state: touch
     mode: "0644"
 
-- name: Set config_dir for Timeseer Reverse Proxy
-  ansible.builtin.set_fact:
-    config_dir: "{{ timeseer_reverse_proxy_config_dir | default(timeseer_reverse_proxy_dir) }}"
-
-- name: Define timeseer-reverse-proxy volume list
-  ansible.builtin.set_fact:
-    reverse_proxy_volume_list: "{{ custom_toml_volume if timeseer_reverse_proxy_config_dir | default('') | trim != '' else [] }}"
-  vars:
-    config_dir: "{{ timeseer_reverse_proxy_config_dir | default(timeseer_reverse_proxy_dir) }}"
-    selinux_suffix: "{{ ':z' if ansible_selinux['status'] == 'enabled' else '' }}"
-    custom_toml_volume:
-      - "{{ config_dir }}:/usr/src/app/proxy-config{{ selinux_suffix }}"
-
-- name: Template configuration files
+- name: Template quadlet
   ansible.builtin.template:
-    src: "{{ item }}"
+    src: "timeseer-reverse-proxy-container.quadlet"
     dest: "/etc/containers/systemd/timeseer-reverse-proxy.container"
     mode: "0644"
-  loop:
-    - "timeseer-reverse-proxy-container.quadlet"
   register: timeseer_reverse_proxy_container
   notify:
     - Restart timeseer-reverse-proxy service

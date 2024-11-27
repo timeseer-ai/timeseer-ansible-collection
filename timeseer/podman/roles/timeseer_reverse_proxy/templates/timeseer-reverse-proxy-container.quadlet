@@ -4,16 +4,18 @@ After=network.target
 
 [Container]
 ContainerName=timeseer-reverse-proxy
-EnvironmentFile=/opt/timeseer/reverse-proxy/env
+EnvironmentFile={{ timeseer_reverse_proxy_dir }}/env
 Exec=/usr/bin/timeseer-reverse-proxy --config-file /usr/src/app/Timeseer-reverse-proxy.toml
 Image={{ timeseer_reverse_proxy_image }}
 Network={{ timeseer_reverse_proxy_network }}.network
 LogDriver=journald
 PublishPort={{ timeseer_reverse_proxy_ports }}
 Pull={{ timeseer_reverse_proxy_image_pull }}
-{% for volume in reverse_proxy_volume_list %}
-Volume={{ volume }}
-{% endfor %}
+{% if timeseer_reverse_proxy_config_dir != "" %}
+Volume={{ timeseer_reverse_proxy_config_dir }}:/usr/src/app/proxy-config{{ ':z' if ansible_selinux['status'] == 'enabled' }}
+{% else %}
+Volume={{ timeseer_reverse_proxy_dir }}:/usr/src/app/proxy-config{{ ':z' if ansible_selinux['status'] == 'enabled' }}
+{% endif %}
 PodmanArgs=--log-opt tag={{ timeseer_reverse_proxy_journal_tag }}
 PodmanArgs=--tty
 
