@@ -76,3 +76,10 @@ releases:
         Introduced a new router for the Public API
       Key Features:
         - API requests are now routed through a dedicated rule that bypasses Traefik's basic authentication.
+  1.0.9:
+    release_date: "2024-11-28"
+    changes:
+      release_summary: |
+        Improve Traefik role
+      Key Features:
+        - Allow configuring Traefik to be HTTP only.

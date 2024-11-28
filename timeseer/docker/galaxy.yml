@@ -8,7 +8,7 @@ namespace: timeseer
 name: docker
 
 # The version of the collection. Must be compatible with semantic versioning
-version: 1.0.8
+version: 1.0.9
 
 # The path to the Markdown (.md) readme file. This path is relative to the root of the collection
 readme: README.md
@@ -17,7 +17,6 @@ readme: README.md
 # @nicks:irc/im.site#channel'
 authors:
   - jeroen@timeseer.ai
-  - diogo@timeseer.ai
 
 ### OPTIONAL but strongly recommended
 # A short summary description of the collection
@@ -30,7 +29,7 @@ license:
 
 # A list of tags you want to associate with the collection for indexing/searching. A tag name has the same character
 # requirements as 'namespace' and 'name'
-tags: [tools, timeseer, data, docker, podman]
+tags: [tools, timeseer, data, docker]
 
 # Collections that this collection requires to be installed for it to be usable. The key of the dict is the
 # collection label 'namespace.name'. The value is a version range
