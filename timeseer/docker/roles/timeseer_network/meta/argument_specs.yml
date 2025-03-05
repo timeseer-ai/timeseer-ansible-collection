@@ -1,0 +1,12 @@
+argument_specs:
+  main:
+    short_description: Define a Docker network for Timeseer containers
+    description:
+      - Prepares a Docker network for use by the other Timeseer containers.
+
+    options:
+      timeseer_network_name:
+        description:
+          - The name of the Docker network use for Timeseer.
+        type: str
+        default: "timeseer"

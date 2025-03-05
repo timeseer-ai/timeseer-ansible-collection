@@ -1,4 +1,5 @@
-dependencies: []
+dependencies:
+  - role: timeseer_network
 galaxy_info:
   author: Jeroen Hoekx, Diogo Lobo
   role_name: traefik
