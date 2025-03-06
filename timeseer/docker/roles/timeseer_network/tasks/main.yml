@@ -1,0 +1,3 @@
+- name: Create a Docker network
+  community.docker.docker_network:
+    name: "{{ timeseer_network_name }}"

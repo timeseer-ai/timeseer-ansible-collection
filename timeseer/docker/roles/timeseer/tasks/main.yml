@@ -23,10 +23,6 @@
     timeseer_storage_mount: "{{ timeseer_db_dir }}/db"
   when: timeseer_docker_volume | default('') | trim == ''
 
-- name: Create a Docker network
-  community.docker.docker_network:
-    name: "{{ timeseer_network }}"
-
 - name: Download demo data
   community.docker.docker_container:
     name: timeseer-demo-data
