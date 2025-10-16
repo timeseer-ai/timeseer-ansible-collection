@@ -8,7 +8,7 @@ ContainerName=timeseer-data-service
 Image={{ timeseer_data_service_image }}
 Exec=/usr/bin/timeseer-data-service
 Network={{ timeseer_data_service_network }}.network
-{% for volume in data_service_volume_list %}
+{% for volume in timeseer_data_service_volume_list %}
 Volume={{ volume }}
 {% endfor %}
 LogDriver=journald

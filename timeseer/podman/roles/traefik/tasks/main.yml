@@ -14,19 +14,19 @@
 
 - name: Define TLS directory
   ansible.builtin.set_fact:
-    tls_config_dir: "{{ 'acme' if traefik_tls == 'acme' else 'certs' }}"
+    traefik_tls_config_dir: "{{ 'acme' if traefik_tls == 'acme' else 'certs' }}"
   when: traefik_tls_enable
 
 - name: Prepare directory for TLS
   ansible.builtin.file:
-    path: "{{ traefik_dir }}/{{ tls_config_dir }}"
+    path: "{{ traefik_dir }}/{{ traefik_tls_config_dir }}"
     mode: "0755"
     state: directory
   when: traefik_tls_enable
 
 - name: Set default ports configuration
   ansible.builtin.set_fact:
-    ports_list: >
+    traefik_ports_list: >
       {{
         [
           "80:80",
@@ -40,11 +40,6 @@
     traefik_volume_list:
       - "{{ traefik_dir }}/traefik.yml:/etc/traefik/traefik.yml"
       - "{{ traefik_dir }}/traefik-timeseer.yml:/etc/traefik/traefik-timeseer.yml"
-
-- name: Define TLS volume
-  ansible.builtin.set_fact:
-    traefik_tls_volume: "{{ traefik_dir }}/{{ tls_config_dir }}:/etc/traefik/{{ tls_config_dir }}{{ ':z' if ansible_selinux.status == 'enabled' else '' }}"
-  when: traefik_tls_enable
 
 - name: Template Traefik configuration files
   ansible.builtin.template:

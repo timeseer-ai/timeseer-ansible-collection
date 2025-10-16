@@ -17,7 +17,7 @@
 
 - name: Define timeseer-data-service volume list
   ansible.builtin.set_fact:
-    data_service_volume_list: "{{ ds_base_volumes + (ds_custom_toml_volume if timeseer_data_service_config_dir | default('') | trim != '' else []) }}"
+    timeseer_data_service_volume_list: "{{ ds_base_volumes + (ds_custom_toml_volume if timeseer_data_service_config_dir | default('') | trim != '' else []) }}"
   vars:
     ds_base_volumes:
       - "{{ timeseer_data_service_storage_mount }}:/usr/src/app/data-service"

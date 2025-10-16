@@ -24,7 +24,7 @@
     restart_policy: unless-stopped
     networks:
       - name: "{{ timeseer_data_service_network }}"
-    volumes: "{{ volume_list }}"
+    volumes: "{{ timeseer_data_service_volume_list }}"
     log_driver: journald
     log_options:
       tag: "{{ timeseer_data_service_journal_tag }}"
@@ -37,4 +37,4 @@
       - "{{ timeseer_data_service_storage_mount }}:/usr/src/app/data-service"
     custom_toml_volume:
       - "{{ timeseer_data_service_config_dir }}:/usr/src/app/Timeseer-data-service.toml"
-    volume_list: "{{ base_volumes + (custom_toml_volume if timeseer_data_service_config_dir | default('') | trim != '' else []) }}"
+    timeseer_data_service_volume_list: "{{ base_volumes + (custom_toml_volume if timeseer_data_service_config_dir | default('') | trim != '' else []) }}"

@@ -6,14 +6,14 @@ After=network.target
 ContainerName=traefik
 Image={{ traefik_image }}
 Network={{ traefik_network }}.network
-{% for port in ports_list %}
+{% for port in traefik_ports_list %}
 PublishPort={{ port }}
 {% endfor %}
 {% for volume in traefik_volume_list %}
 Volume={{ volume }}
 {% endfor %}
-{% if traefik_tls_volume is defined %}
-Volume={{ traefik_tls_volume }}
+{% if traefik_tls_enable %}
+Volume={{ traefik_dir }}/{{ traefik_tls_config_dir }}:/etc/traefik/{{ traefik_tls_config_dir }}{{ ':z' if ansible_selinux.status == 'enabled' else '' }}
 {% endif %}
 PodmanArgs=--log-opt tag={{ traefik_journal_tag }}
 PodmanArgs=--tty

@@ -19,7 +19,8 @@ The `timeseer` role is primarily intended for deploying the Timeseer Docker cont
 
 ### Installation Directory
 
-By default, the `timeseer` role creates the following directories on your local machine:
+By default, the `timeseer` role creates the following directories:
+
 - **Main directory:** `/opt/timeseer`
 - **Database directory:** `/opt/timeseer/db`
 - **Data directory:** `/opt/timeseer/data`
@@ -158,10 +159,10 @@ Here are the variables used in this role, complete with their default values fou
 - `timeseer_image`: Docker image for Timeseer. (default: `"container.timeseer.ai/timeseer"`)
 - `timeseer_download_demo_data`: Whether to download demo data for Timeseer. (default: `false`)
 - `timeseer_config_dir`: Optional directory for custom Timeseer configurations. (default: `""`)
+- `timeseer_volumes`: Optional list of extra volumes to mount in the container. (default: `[]`)
 - `timeseer_ports`: Custom port mapping for the Timeseer container. This should be specified in the Docker port mapping format (e.g., `"8080:8080"`). (default: `""`)
 - `timeseer_journal_tag`: Tag for journal logging. (default: `"TIMESEER"`)
 - `timeseer_image_pull`: Whether to pull the Timeseer Docker image. (default: `true`)
-
 
 ---
 
