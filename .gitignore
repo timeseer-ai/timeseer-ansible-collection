@@ -1,3 +1,4 @@
 .ansible/
 settings.json
 venv/
+test/
