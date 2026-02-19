@@ -44,7 +44,7 @@
   ansible.builtin.set_fact:
     timeseer_base_volumes:
       - "{{ timeseer_dir }}/data:/usr/src/app/data"
-      - "{{ timeseer_storage_mount }}:/usr/src/app/db{{ ':z' if ansible_selinux['status'] == 'enabled' else '' }}"
+      - "{{ timeseer_storage_mount }}:/usr/src/app/db{{ ':z' if ansible_facts.selinux.status == 'enabled' else '' }}"
     timeseer_config_volumes: []
 
 - name: Add a configuration volume

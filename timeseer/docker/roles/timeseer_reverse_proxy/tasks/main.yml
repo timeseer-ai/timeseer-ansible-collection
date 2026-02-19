@@ -29,7 +29,7 @@
     ports: "{{ timeseer_reverse_proxy_ports if timeseer_reverse_proxy_ports and timeseer_reverse_proxy_ports != '' else omit }}"
   vars:
     config_dir: "{{ timeseer_reverse_proxy_config_dir | default(timeseer_reverse_proxy_dir) }}"
-    selinux_suffix: "{{ ':z' if ansible_selinux['status'] == 'enabled' else '' }}"
+    selinux_suffix: "{{ ':z' if ansible_facts.selinux.status == 'enabled' else '' }}"
     custom_toml_volume:
       - "{{ config_dir }}:/usr/src/app/proxy-config{{ selinux_suffix }}"
     reverse_proxy_volume_list: "{{ custom_toml_volume if timeseer_reverse_proxy_config_dir | default('') | trim != '' else [] }}"
