@@ -83,3 +83,10 @@ releases:
         Improve Traefik role
       Key Features:
         - Allow configuring Traefik to be HTTP only.
+  1.0.10:
+    release_date: "2026-09-23"
+    changes:
+      release_summary: |
+        Remove deprecated options.
+      Key Features:
+        - Remove Apache Arrow Flight support.
