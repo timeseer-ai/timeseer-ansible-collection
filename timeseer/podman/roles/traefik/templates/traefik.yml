@@ -15,15 +15,20 @@ entryPoints:
   http:
     address: ":80"
     http:
+      aliasHeadersStrategy: delete
       redirections:
         entryPoint:
           to: https
           scheme: https
   https:
     address: ":443"
+    http:
+      aliasHeadersStrategy: delete
 {% else %}
   http:
     address: ":80"
+    http:
+      aliasHeadersStrategy: delete
 {% endif %}
 {% if traefik_expose_flight %}
   flight:
