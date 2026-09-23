@@ -24,17 +24,6 @@
     mode: "0755"
     state: directory
 
-- name: Set ports configuration
-  ansible.builtin.set_fact:
-    traefik_ports_list:
-      - "80:80"
-      - "443:443"
-
-- name: Add port 8443 when traefik_expose_flight is enabled
-  ansible.builtin.set_fact:
-    traefik_ports_list: "{{ traefik_ports_list + ['8443:8443'] }}"
-  when: traefik_expose_flight
-
 - name: Template configuration files
   ansible.builtin.template:
     src: "{{ item }}"
@@ -56,7 +45,9 @@
     recreate: "{{ traefik_recreate_container }}"
     restart_policy: unless-stopped
     network_mode: "{{ traefik_network }}"
-    ports: "{{ traefik_ports_list }}"
+    ports:
+      - "80:80"
+      - "443:443"
     volumes:
       - "{{ traefik_yml_path }}"
       - "{{ timeseer_yml_path }}"

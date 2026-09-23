@@ -10,12 +10,6 @@ http:
         servers:
         - url: "http://timeseer-reverse-proxy:8000"
 {% endif %}
-{% if traefik_expose_flight %}
-    flight:
-      loadBalancer:
-        servers:
-        - url: "h2c://timeseer:8081"
-{% endif %}
 
 {% if traefik_basic_auth_enable %}
   middlewares:
@@ -52,22 +46,6 @@ http:
         certResolver: timeseer-le
 {% elif traefik_tls == "certs" %}
       tls: {}
-{% endif %}
-{% endif %}
-
-{% if traefik_expose_flight %}
-    flight:
-      entryPoints:
-      - "flight"
-      rule: "Host(`{{ traefik_host }}`)"
-      service: flight
-{% if traefik_tls_enable %}
-{% if traefik_tls == "acme" %}
-      tls:
-        certResolver: timeseer-le
-{% elif traefik_tls == "certs" %}
-      tls: {}
-{% endif %}
 {% endif %}
 {% endif %}
 

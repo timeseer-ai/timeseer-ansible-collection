@@ -30,10 +30,6 @@ entryPoints:
     http:
       aliasHeadersStrategy: delete
 {% endif %}
-{% if traefik_expose_flight %}
-  flight:
-    address: ":8443"
-{% endif %}
 
 {% if traefik_tls_enable and traefik_tls == "acme" %}
 certificatesResolvers:

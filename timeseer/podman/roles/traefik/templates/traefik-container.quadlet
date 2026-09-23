@@ -6,9 +6,8 @@ After=network.target
 ContainerName=traefik
 Image={{ traefik_image }}
 Network={{ traefik_network }}.network
-{% for port in traefik_ports_list %}
-PublishPort={{ port }}
-{% endfor %}
+PublishPort=80:80
+PublishPort=443:443
 {% for volume in traefik_volume_list %}
 Volume={{ volume }}
 {% endfor %}

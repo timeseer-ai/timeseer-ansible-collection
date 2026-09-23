@@ -3,7 +3,6 @@ traefik_image: "docker.io/traefik:v3"
 traefik_network: timeseer
 traefik_journal_tag: "TRAEFIK"
 traefik_host: "localhost"
-traefik_expose_flight: false
 traefik_timeseer_reverse_proxy_enable: false
 traefik_basic_auth_enable: false
 traefik_basic_auth_users: []

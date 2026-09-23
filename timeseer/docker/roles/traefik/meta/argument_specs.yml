@@ -3,7 +3,7 @@ argument_specs:
     short_description: Configure and run Traefik with optional Let's Encrypt and basic authentication
     description:
       - Sets up and runs Traefik in a Docker container with options for SSL/TLS via Let's Encrypt and basic authentication.
-      - Handles configuration for Traefik including directories, networking, and optional features like exposing flight and reverse proxy.
+      - Handles configuration for Traefik including directories, networking, and optional features like exposing the reverse proxy.
 
     options:
       traefik_dir:
@@ -55,12 +55,6 @@ argument_specs:
         type: list
         elements: str
         default: []
-
-      traefik_expose_flight:
-        description:
-          - Whether to expose flight interface on Traefik.
-        type: bool
-        default: false
 
       traefik_timeseer_reverse_proxy_enable:
         description:

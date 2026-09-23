@@ -58,7 +58,6 @@ Below are the variables used in this role, along with their default values speci
 - `traefik_host`: Hostname for the Traefik service. (default: `"localhost"`)
 - `traefik_basic_auth_enable`: Set to `true` to configure basic authentication. (default: `false`)
 - `traefik_basic_auth_users`: List of users for basic authentication. Each entry should be in the format `"username:hashedpassword"`. (default: `[]`)
-- `traefik_expose_flight`: Whether to expose the flight interface on Traefik. (default: `false`)
 - `traefik_timeseer_reverse_proxy_enable`: Whether to enable the Timeseer reverse proxy configuration in Traefik. (default: `false`)
 - `traefik_tls_enable`: Set to `false` to disable TLS completely. (default: `true`)
 - `traefik_tls`: Method for obtaining SSL/TLS certificates. Use `"acme"` to automatically obtain certificates using the ACME protocol or `"certs"` to use your own pre-existing certificates. (default: `"acme"`)
