@@ -4,4 +4,4 @@ galaxy_info:
   role_name: timeseer
   description: configure timeseer
   license: license (MIT)
-  min_ansible_version: "2.5"
+  min_ansible_version: "2.19"
