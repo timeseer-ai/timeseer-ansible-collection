@@ -14,16 +14,9 @@ jobs:
         ansible-version:
           - "2.19"
           - "2.21"
-        runner-python-version:
-          - 3.12
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Python ${{ matrix.runner-python-version }}
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.runner-python-version }}
+        uses: actions/checkout@v7
 
       - name: Install specific Ansible version ${{ matrix.ansible-version }}
         run: |
@@ -47,13 +40,11 @@ jobs:
       matrix:
         ansible-version:
           - "2.21"
-        runner-python-version:
-          - 3.12
     needs: lint
     if: github.ref == 'refs/heads/master'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Install specific Ansible version ${{ matrix.ansible-version }}
         run: |
@@ -66,7 +57,7 @@ jobs:
         run: ansible-galaxy collection build ./timeseer/podman/ -v  --output-path ./artifacts
 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: collections
           path: artifacts/*.tar.gz

@@ -12,16 +12,9 @@ jobs:
       matrix:
         ansible-version:
           - "2.21"
-        runner-python-version:
-          - 3.12
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Python ${{ matrix.runner-python-version }}
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.runner-python-version }}
+        uses: actions/checkout@v7
 
       - name: Install specific Ansible version ${{ matrix.ansible-version }}
         run: |
